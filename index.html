@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nay Win Aung — Architecture</title>
+  <meta name="description" content="Architecture student at KMUTT Bangkok. Selected works in studio, competition, and professional practice.">
+  <meta property="og:title" content="Nay Win Aung — Architecture">
+  <meta property="og:description" content="Architecture student at KMUTT Bangkok. Selected works in studio, competition, and professional practice.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f4f0;
+      --ink:       #1a1a18;
+      --ink-faint: #9a9890;
+      --accent:    #1a1a18;
+      --card-fade: rgba(20, 20, 18, 0.52);
+      --serif:     'EB Garamond', Georgia, serif;
+      --mono:      'DM Mono', monospace;
+      --nav-h:     56px;
+      --gutter:    clamp(24px, 5vw, 72px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--gutter);
+      background: var(--bg);
+      z-index: 100;
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s;
+    }
+    nav.scrolled { border-color: #dddbd5; }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: .04em;
+      color: var(--ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--ink); }
+
+    /* ── SECTIONS ────────────────────────────────────────────── */
+    section {
+      padding-top: calc(var(--nav-h) + 64px);
+      padding-bottom: 96px;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    section:first-of-type { padding-top: calc(var(--nav-h) + 80px); }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 40px;
+      display: block;
+    }
+
+    /* ── FILTER TABS ─────────────────────────────────────────── */
+    .filter-row {
+      display: flex;
+      gap: 0;
+      margin-bottom: 48px;
+      border-bottom: 1px solid #dddbd5;
+    }
+    .filter-btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      background: none;
+      border: none;
+      padding: 10px 20px 10px 0;
+      cursor: pointer;
+      position: relative;
+      transition: color .2s;
+    }
+    .filter-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0;
+      width: 0; height: 1px;
+      background: var(--ink);
+      transition: width .25s ease;
+    }
+    .filter-btn.active { color: var(--ink); }
+    .filter-btn.active::after { width: calc(100% - 20px); }
+    .filter-btn:hover { color: var(--ink); }
+
+    /* ── PROJECT GRID ────────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      cursor: pointer;
+      background: #ccc;
+    }
+    .card[data-cat="models"] { display: none; }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .55s cubic-bezier(.22,.68,0,1.2), filter .35s ease;
+      filter: brightness(.48);
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card-name {
+      font-family: var(--serif);
+      font-size: clamp(15px, 1.8vw, 22px);
+      font-weight: 400;
+      color: #f5f4f0;
+      letter-spacing: .01em;
+      text-align: center;
+      transition: opacity .25s ease, transform .25s ease;
+      padding: 0 16px;
+    }
+    .card-cat {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(245,244,240,.55);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .card-arrow {
+      font-family: var(--mono);
+      font-size: 28px;
+      color: #f5f4f0;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity .25s ease, transform .25s ease;
+      position: absolute;
+    }
+
+    .card:hover img {
+      transform: scale(1.04);
+      filter: brightness(1);
+    }
+    .card:hover .card-name,
+    .card:hover .card-cat {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── MODELS DIVIDER ──────────────────────────────────────── */
+    .models-divider {
+      display: none;
+      grid-column: 1 / -1;
+      padding: 48px 0 24px;
+      border-top: 1px solid #dddbd5;
+      margin-top: 2px;
+    }
+    .models-divider span {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* ── RESUME SECTION ──────────────────────────────────────── */
+    #resume {
+      border-top: 1px solid #dddbd5;
+    }
+
+    .resume-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .resume-left h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 32px;
+    }
+
+    .resume-left p {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.75;
+      margin-bottom: 32px;
+      max-width: 460px;
+    }
+
+    .btn-download {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      padding: 13px 28px;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .btn-download:hover {
+      background: #444;
+    }
+
+    .resume-right { padding-top: 8px; }
+
+    .cv-block { margin-bottom: 36px; }
+    .cv-block-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 12px;
+    }
+    .cv-entry {
+      margin-bottom: 16px;
+    }
+    .cv-entry-title {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    .cv-entry-sub {
+      font-size: 14px;
+      color: #666;
+      font-style: italic;
+    }
+    .cv-entry-date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-faint);
+      margin-top: 2px;
+    }
+
+    .skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .skill-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .06em;
+      color: var(--ink);
+      border: 1px solid #ccc;
+      padding: 4px 10px;
+    }
+
+    /* ── CONTACT SECTION ─────────────────────────────────────── */
+    #contact {
+      border-top: 1px solid #dddbd5;
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-left h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .contact-left p {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.75;
+      max-width: 380px;
+    }
+    .contact-meta {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .contact-meta a {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: .06em;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .contact-meta a:hover { color: var(--ink); }
+
+    /* ── CONTACT FORM ────────────────────────────────────────── */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .form-field {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .form-field label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 8px;
+    }
+
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      padding: 8px 0 10px;
+      font-family: var(--serif);
+      font-size: 16px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+      resize: none;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus {
+      border-color: var(--ink);
+    }
+    .form-field textarea { min-height: 100px; }
+
+    .btn-send {
+      align-self: flex-start;
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      border: none;
+      padding: 13px 28px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-send:hover { background: #444; }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid #dddbd5;
+      padding: 28px var(--gutter);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer span {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: var(--ink-faint);
+    }
+
+    /* ── HIDDEN STATE ────────────────────────────────────────── */
+    .card.hidden {
+      display: none;
+    }
+
+    /* ── MOBILE ──────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      .resume-layout,
+      .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+      .nav-links { gap: 20px; }
+    }
+    @media (max-width: 480px) {
+      .filter-btn { padding: 10px 14px 10px 0; font-size: 10px; }
+    }
+
+    /* ── SCROLL TO TOP ───────────────────────────────────────── */
+    #scroll-top {
+      position: fixed;
+      bottom: 36px;
+      right: 36px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s, border-color .2s, background .2s;
+      z-index: 99;
+    }
+    #scroll-top.visible { opacity: 1; pointer-events: auto; }
+    #scroll-top:hover { border-color: var(--ink); background: var(--ink); }
+    #scroll-top svg {
+      width: 14px; height: 14px;
+      stroke: var(--ink); fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      transition: stroke .2s;
+    }
+    #scroll-top:hover svg { stroke: var(--bg); }
+    @media (max-width: 480px) { #scroll-top { bottom: 20px; right: 20px; } }
+
+    /* ── LIGHTBOX ────────────────────────────────────────────── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 20, 18, 0.96);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox-img {
+      max-width: 88vw;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+    }
+    #lightbox-close {
+      position: absolute;
+      top: 24px; right: 32px;
+      font-family: var(--mono);
+      font-size: 18px;
+      color: #f5f4f0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: .5;
+      transition: opacity .2s;
+      line-height: 1;
+    }
+    #lightbox-close:hover { opacity: 1; }
+    #lightbox-prev, #lightbox-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #f5f4f0;
+      font-family: var(--mono);
+      font-size: 22px;
+      cursor: pointer;
+      opacity: .4;
+      transition: opacity .2s;
+      padding: 28px 20px;
+    }
+    #lightbox-prev:hover, #lightbox-next:hover { opacity: 1; }
+    #lightbox-prev { left: 12px; }
+    #lightbox-next { right: 12px; }
+    #lightbox-meta {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    #lightbox-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(245, 244, 240, .45);
+      white-space: nowrap;
+    }
+    #lightbox-counter {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: rgba(245, 244, 240, .3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#works" class="nav-logo">/\/ \/\/ /\</a>
+    <ul class="nav-links">
+      <li><a href="#works" class="active" data-section="works">Works</a></li>
+      <li><a href="#resume" data-section="resume">Resume</a></li>
+      <li><a href="#contact" data-section="contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- WORKS -->
+  <section id="works">
+    <span class="section-label">Selected Works</span>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="studio">Studio</button>
+      <button class="filter-btn" data-filter="competition">Competition</button>
+      <button class="filter-btn" data-filter="professional">Professional</button>
+      <button class="filter-btn" data-filter="models">Models</button>
+    </div>
+
+    <div class="grid" id="project-grid">
+
+      <!-- Studio -->
+      <div class="card" data-cat="studio" data-order="1">
+        <img src="images/wickercraft/hero.png" alt="Wickercraft Gallery" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Wickercraft Gallery</span>
+          <span class="card-cat">Studio · 2025</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="studio" data-order="2">
+        <img src="images/campus-life/hero.png" alt="Campus Life ++" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Campus Life ++</span>
+          <span class="card-cat">Studio · 2024</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="studio" data-order="3">
+        <img src="images/cccac/hero.png" alt="CCCAC" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">CCCAC</span>
+          <span class="card-cat">Studio · 2024</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Professional -->
+      <div class="card" data-cat="professional" data-order="4">
+        <img src="images/cliff-house/hero.png" alt="Cliff House" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Cliff House</span>
+          <span class="card-cat">Professional · 2023</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="professional" data-order="5">
+        <img src="images/golden-valley/hero.png" alt="Golden Valley Residence" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Golden Valley Residence</span>
+          <span class="card-cat">Professional · 2023</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Competition -->
+      <div class="card" data-cat="competition" data-order="6">
+        <img src="images/mental-healing/hero.png" alt="Mental Healing Hands" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Mental Healing Hands</span>
+          <span class="card-cat">Competition · 2023 · 3rd Place</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="competition" data-order="7">
+        <img src="images/drg-2026/hero.png" alt="DRG 2026" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">DRG 2026: Resilience Beyond Control</span>
+          <span class="card-cat">Competition · 2026</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Models divider (shown in All and Models filter) -->
+      <div class="models-divider" id="models-divider">
+        <span>Physical &amp; Experimental Models</span>
+      </div>
+
+      <!-- Models — click opens photo group lightbox.
+           Set data-photos to however many images are in that folder (01.png, 02.png …) -->
+      <div class="card" data-cat="models" data-order="8" data-group="campus-life" data-photos="3">
+        <img src="images/models/campus-life/01.png" alt="Campus Life Model" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Campus Life ++</span>
+          <span class="card-cat">Physical Model</span>
+          <span class="card-arrow">⊞</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="models" data-order="9" data-group="cccac" data-photos="2">
+        <img src="images/models/cccac/01.png" alt="CCCAC Model" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">CCCAC</span>
+          <span class="card-cat">Physical Model</span>
+          <span class="card-arrow">⊞</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="models" data-order="10" data-group="wickercraft" data-photos="3">
+        <img src="images/models/wickercraft/01.png" alt="Wickercraft Model" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Wickercraft Gallery</span>
+          <span class="card-cat">3D Printed Model</span>
+          <span class="card-arrow">⊞</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="models" data-order="11" data-group="experimental" data-photos="2">
+        <img src="images/models/experimental/01.png" alt="Experimental Models" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Experimental</span>
+          <span class="card-cat">Process Models</span>
+          <span class="card-arrow">⊞</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section id="resume">
+    <div class="resume-layout">
+      <div class="resume-left">
+        <h2>Nay Win<br>Aung</h2>
+        <p>Architecture student at KMUTT, returning to school after three years in practice in Yangon. Available for internship June – July 2026.</p>
+        <a href="cv/CV_NayWinAung_2026.pdf" class="btn-download" download>Download CV</a>
+      </div>
+
+      <div class="resume-right">
+        <div class="cv-block">
+          <div class="cv-block-label">Education</div>
+          <div class="cv-entry">
+            <div class="cv-entry-title">Bachelor of Architecture</div>
+            <div class="cv-entry-sub">KMUTT, Bangkok</div>
+            <div class="cv-entry-date">2024 – Present</div>
+          </div>
+          <div class="cv-entry">
+            <div class="cv-entry-title">Bachelor of Architecture (4 yrs)</div>
+            <div class="cv-entry-sub">Mandalay Technological University</div>
+            <div class="cv-entry-date">2016 – 2020</div>
+          </div>
+        </div>
+
+        <div class="cv-block">
+          <div class="cv-block-label">Experience</div>
+          <div class="cv-entry">
+            <div class="cv-entry-title">Assistant Architect</div>
+            <div class="cv-entry-sub">Design 2000 Co. Ltd., Yangon</div>
+            <div class="cv-entry-date">2021 – 2024</div>
+          </div>
+        </div>
+
+        <div class="cv-block">
+          <div class="cv-block-label">Skills</div>
+          <div class="skills-row">
+            <span class="skill-tag">AutoCAD</span>
+            <span class="skill-tag">SketchUp</span>
+            <span class="skill-tag">Rhino</span>
+            <span class="skill-tag">Grasshopper</span>
+            <span class="skill-tag">V-Ray</span>
+            <span class="skill-tag">Enscape</span>
+            <span class="skill-tag">Photoshop</span>
+            <span class="skill-tag">Illustrator</span>
+            <span class="skill-tag">3D Printing</span>
+            <span class="skill-tag">Laser Cutting</span>
+          </div>
+        </div>
+
+        <div class="cv-block">
+          <div class="cv-block-label">Languages</div>
+          <div class="cv-entry">
+            <div class="cv-entry-title">English <span style="font-weight:400;color:#666">— IELTS 8.0</span></div>
+            <div class="cv-entry-title">Burmese <span style="font-weight:400;color:#666">— Native</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-layout">
+      <div class="contact-left">
+        <h2>Get in<br>touch</h2>
+        <p>Open to internship opportunities for summer 2026. Feel free to reach out about work, collaboration, or anything else.</p>
+        <div class="contact-meta">
+          <a href="mailto:naywinag24@gmail.com">naywinag24@gmail.com</a>
+          <a href="mailto:naywin.aung@kmutt.ac.th">naywin.aung@kmutt.ac.th</a>
+          <a href="https://github.com/atlasmoth-arc" target="_blank" rel="noopener">github.com/atlasmoth-arc</a>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contact-form">
+        <div class="form-field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Say something..." required></textarea>
+        </div>
+        <button type="submit" class="btn-send">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Nay Win Aung · Bangkok, Thailand</span>
+    <span>&copy; 2026 Nay Win Aung</span>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Model photo viewer">
+    <button id="lightbox-close" aria-label="Close">✕</button>
+    <button id="lightbox-prev" aria-label="Previous">←</button>
+    <img id="lightbox-img" src="" alt="">
+    <button id="lightbox-next" aria-label="Next">→</button>
+    <div id="lightbox-meta">
+      <span id="lightbox-title"></span>
+      <span id="lightbox-counter"></span>
+    </div>
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button id="scroll-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script>
+    // ── NAV scroll border
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // ── Nav active link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-links a[data-section="${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.35 });
+    sections.forEach(s => observer.observe(s));
+
+    // ── Filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.card');
+    const modelsDivider = document.getElementById('models-divider');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        cards.forEach(card => {
+          const cat = card.dataset.cat;
+          if (filter === 'all') {
+            card.classList.remove('hidden');
+            card.style.display = '';
+          } else if (filter === cat) {
+            card.classList.remove('hidden');
+            card.style.display = '';
+          } else {
+            card.classList.add('hidden');
+            card.style.display = 'none';
+          }
+        });
+
+        // Show models divider only on All or Models filter
+        if (filter === 'all' || filter === 'models') {
+          modelsDivider.style.display = 'block';
+        } else {
+          modelsDivider.style.display = 'none';
+        }
+      });
+    });
+
+    // ── Contact form → mailto
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name    = document.getElementById('name').value.trim();
+      const email   = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const subject = encodeURIComponent('Enquiry');
+      const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+      window.location.href = `mailto:naywinag24@gmail.com?subject=${subject}&body=${body}`;
+    });
+    // ── Scroll to top
+    const scrollBtn = document.getElementById('scroll-top');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('visible', window.scrollY > 400);
+    });
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ── Lightbox for model groups
+    const lightbox     = document.getElementById('lightbox');
+    const lbImg        = document.getElementById('lightbox-img');
+    const lbCounter    = document.getElementById('lightbox-counter');
+    const lbTitle      = document.getElementById('lightbox-title');
+    let lbImages = [], lbIndex = 0;
+
+    function showLbImage() {
+      lbImg.src = lbImages[lbIndex];
+      lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+    }
+    function openLightbox(images, title) {
+      lbImages = images;
+      lbIndex  = 0;
+      lbTitle.textContent = title;
+      showLbImage();
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev').addEventListener('click', () => {
+      lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length;
+      showLbImage();
+    });
+    document.getElementById('lightbox-next').addEventListener('click', () => {
+      lbIndex = (lbIndex + 1) % lbImages.length;
+      showLbImage();
+    });
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape')     closeLightbox();
+      if (e.key === 'ArrowLeft')  { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; showLbImage(); }
+      if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbImages.length; showLbImage(); }
+    });
+
+    // Attach lightbox to model cards
+    document.querySelectorAll('.card[data-cat="models"]').forEach(card => {
+      card.addEventListener('click', () => {
+        const group  = card.dataset.group;
+        const count  = parseInt(card.dataset.photos, 10);
+        const name   = card.querySelector('.card-name').textContent;
+        const sub    = card.querySelector('.card-cat').textContent;
+        const images = Array.from({ length: count }, (_, i) =>
+          `images/models/${group}/${String(i + 1).padStart(2, '0')}.png`
+        );
+        openLightbox(images, `${name} — ${sub}`);
+      });
+    });
+  </script>
+</body>
+</html>
