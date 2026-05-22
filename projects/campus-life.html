@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Life ++ — Nay Win Aung</title>
+  <meta name="description" content="An intensive rethinking of student life infrastructure on the KMUTT campus — pro">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f4f0;
+      --ink:       #1a1a18;
+      --ink-faint: #9a9890;
+      --serif:     'EB Garamond', Georgia, serif;
+      --sans:      'Quicksand', sans-serif;
+      --mono:      'DM Mono', monospace;
+      --nav-h:     56px;
+      --gutter:    clamp(24px, 5vw, 72px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+  font-weight: 400;
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav#main-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--gutter);
+      background: var(--bg);
+      z-index: 100;
+      border-bottom: 1px solid #dddbd5;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: .04em;
+      color: var(--ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    .project-header {
+      margin-top: var(--nav-h);
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 48px var(--gutter) 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: stretch;
+      border-bottom: 1px solid #dddbd5;
+    }
+    .project-hero {
+      height: 100%;
+    }
+    .project-hero img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .project-info { padding-top: 8px; }
+    .project-title {
+      font-family: var(--sans);
+  font-weight: 400;
+      font-size: clamp(28px, 3vw, 46px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+    .project-desc {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 300;
+      color: #444;
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .project-meta { display: flex; flex-direction: column; gap: 8px; }
+    .project-meta-row { display: flex; align-items: baseline; gap: 16px; }
+    .project-meta-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      min-width: 80px;
+    }
+    .project-meta-value {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: .04em;
+      color: var(--ink);
+    }
+
+    .project-images {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px var(--gutter) 96px;
+    }
+    .project-images img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-bottom: 16px;
+    }
+
+    footer {
+      border-top: 1px solid #dddbd5;
+      padding: 28px var(--gutter);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer span {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: var(--ink-faint);
+    }
+
+
+    /* ── SCROLL TO TOP ─────────────────────────────────────── */
+    #scroll-top {
+      position: fixed;
+      bottom: 36px; right: 36px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s, border-color .2s, background .2s;
+      z-index: 99;
+    }
+    #scroll-top.visible { opacity: 1; pointer-events: auto; }
+    #scroll-top:hover { border-color: var(--ink); background: var(--ink); }
+    #scroll-top svg {
+      width: 14px; height: 14px;
+      stroke: var(--ink); fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      transition: stroke .2s;
+    }
+    #scroll-top:hover svg { stroke: var(--bg); }
+    @media (max-width: 480px) { #scroll-top { bottom: 20px; right: 20px; } }
+
+    @media (max-width: 768px) {
+      .project-header { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
+    }
+
+    /* ── PAGE-NUMBER COVER ──────────────────────────────────── */
+    .img-wrap {
+      position: relative;
+      display: block;
+      margin-bottom: 16px;
+      line-height: 0;
+    }
+    .img-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-bottom: 0;
+    }
+    .img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 5%;
+      aspect-ratio: 2.2 / 1;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="main-nav">
+    <a href="/#works" class="nav-logo">/\/ \/\/ /\</a>
+    <ul class="nav-links">
+      <li><a href="/#works">Architecture</a></li>
+      <li><a href="/#resume">Resume</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="project-header">
+    <div class="project-hero">
+      <img src="../images/campus-life/hero.png" alt="Campus Life ++">
+    </div>
+    <div class="project-info">
+      <h1 class="project-title">Campus Life ++</h1>
+      <!-- EDIT: replace with your actual description -->
+      <p class="project-desc">
+        This project reimagines an underutilized campus building into an active student hub. The form was developed through a computational design process, using Grasshopper to carve voxels based on sightlines and site constraints. The resulting stepped structure features elevated platforms and transparent communal spaces, maximizing natural light, ventilation, and visual connections to the adjacent sports field.
+      </p>
+      <div class="project-meta">
+        <div class="project-meta-row">
+          <span class="project-meta-label">Year</span>
+          <span class="project-meta-value">2024</span>
+        </div>
+        <div class="project-meta-row">
+          <span class="project-meta-label">Type</span>
+          <span class="project-meta-value">Studio</span>
+        </div>
+        <div class="project-meta-row">
+          <span class="project-meta-label">Location</span>
+          <span class="project-meta-value">Bangkok, Thailand</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-images">
+    <img src="../images/campus-life/01.png" alt="">
+    <img src="../images/campus-life/02.png" alt="">
+    <img src="../images/campus-life/03.png" alt="">
+    <img src="../images/campus-life/04.png" alt="">
+    <img src="../images/campus-life/05.png" alt="">
+  </div>
+
+  <button id="scroll-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <footer>
+    <span>Nay Win Aung · Bangkok, Thailand</span>
+    <span>&copy; 2026 Nay Win Aung</span>
+  </footer>
+
+  <script>
+    const scrollBtn = document.getElementById('scroll-top');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('visible', window.scrollY > 400);
+    });
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+
+  <script>
+    /* wrap project images so page-number cover ::after works */
+    document.querySelectorAll('.project-images img').forEach(img => {
+      const wrap = document.createElement('div');
+      wrap.className = 'img-wrap';
+      img.parentNode.insertBefore(wrap, img);
+      wrap.appendChild(img);
+    });
+  </script>
+</body>
+</html>

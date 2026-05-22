@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- EDIT: update title -->
+  <title>Project Title — Nay Win Aung</title>
+  <meta name="description" content="Project description here.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f4f0;
+      --ink:       #1a1a18;
+      --ink-faint: #9a9890;
+      --serif:     'EB Garamond', Georgia, serif;
+      --mono:      'DM Mono', monospace;
+      --nav-h:     56px;
+      --gutter:    clamp(24px, 5vw, 72px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ───────────────────────────────────────────────── */
+    nav#main-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--gutter);
+      background: var(--bg);
+      z-index: 100;
+      border-bottom: 1px solid #dddbd5;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: .04em;
+      color: var(--ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── PROJECT HEADER — hero left, info right ────────────── */
+    .project-header {
+      margin-top: var(--nav-h);
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 48px var(--gutter) 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: stretch;
+      border-bottom: 1px solid #dddbd5;
+    }
+
+    .project-hero {
+      height: 100%;
+    }
+    .project-hero img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: top left;
+      object-position: center;
+    }
+
+    .project-info {
+      padding-top: 8px;
+    }
+
+    .project-title {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 46px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+
+    .project-desc {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+
+    .project-meta { display: flex; flex-direction: column; gap: 8px; }
+    .project-meta-row { display: flex; align-items: baseline; gap: 16px; }
+    .project-meta-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      min-width: 80px;
+    }
+    .project-meta-value {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: .04em;
+      color: var(--ink);
+    }
+
+    /* ── IMAGES ────────────────────────────────────────────── */
+    .project-images {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px var(--gutter) 96px;
+    }
+    .project-images img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-bottom: 16px;
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid #dddbd5;
+      padding: 28px var(--gutter);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer span {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: var(--ink-faint);
+    }
+
+    /* ── MOBILE ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .project-header { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="main-nav">
+    <a href="/#works" class="nav-logo">/\/ \/\/ /\</a>
+    <ul class="nav-links">
+      <li><a href="/#works">Works</a></li>
+      <li><a href="/#resume">Resume</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER: hero left, info right -->
+  <div class="project-header">
+    <div class="project-hero">
+      <!-- EDIT: update image path -->
+      <img src="../images/PROJECT-FOLDER/hero.png" alt="Project Title">
+    </div>
+    <div class="project-info">
+      <!-- EDIT: project title -->
+      <h1 class="project-title">Project<br>Title</h1>
+      <!-- EDIT: 2–4 sentence description -->
+      <p class="project-desc">
+        Short description of the project. What was the brief, what was the core idea, and what makes it interesting. Keep it to 2–4 sentences.
+      </p>
+      <div class="project-meta">
+        <!-- EDIT: fill in your values -->
+        <div class="project-meta-row">
+          <span class="project-meta-label">Year</span>
+          <span class="project-meta-value">2025</span>
+        </div>
+        <div class="project-meta-row">
+          <span class="project-meta-label">Type</span>
+          <span class="project-meta-value">Studio · 5th Year</span>
+        </div>
+        <div class="project-meta-row">
+          <span class="project-meta-label">Location</span>
+          <span class="project-meta-value">Bangkok, Thailand</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGES — add or remove <img> lines as needed -->
+  <div class="project-images">
+    <img src="../images/PROJECT-FOLDER/01.png" alt="">
+    <img src="../images/PROJECT-FOLDER/02.png" alt="">
+    <img src="../images/PROJECT-FOLDER/03.png" alt="">
+    <!-- keep adding lines for more images -->
+  </div>
+
+  <footer>
+    <span>Nay Win Aung · Bangkok, Thailand</span>
+    <span>&copy; 2026 Nay Win Aung</span>
+  </footer>
+
+</body>
+</html>

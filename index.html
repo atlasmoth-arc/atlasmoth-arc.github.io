@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,6 +21,7 @@
       --accent:    #1a1a18;
       --card-fade: rgba(20, 20, 18, 0.52);
       --serif:     'EB Garamond', Georgia, serif;
+      --sans:      'Quicksand', sans-serif;
       --mono:      'DM Mono', monospace;
       --nav-h:     56px;
       --gutter:    clamp(24px, 5vw, 72px);
@@ -31,7 +32,8 @@
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: var(--serif);
+      font-family: var(--sans);
+  font-weight: 400;
       font-size: 17px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -90,7 +92,7 @@
       max-width: 1400px;
       margin: 0 auto;
     }
-    section:first-of-type { padding-top: calc(var(--nav-h) + 80px); }
+    section:first-of-type { padding-top: 56px; }
 
     .section-label {
       font-family: var(--mono);
@@ -101,6 +103,45 @@
       color: var(--ink-faint);
       margin-bottom: 40px;
       display: block;
+    }
+
+    /* ── BANNER ──────────────────────────────────────────────── */
+    .banner-wrap {
+      margin-top: 0;
+      position: relative;
+      width: 100%;
+      line-height: 0;
+    }
+    .banner-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .banner-arrow {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 16px;
+      animation: banner-blink 3s ease-in-out infinite;
+      line-height: 0;
+    }
+    .banner-arrow svg {
+      width: 48px;
+      height: 24px;
+      stroke: var(--ink);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: block;
+    }
+    @keyframes banner-blink {
+      0%, 100% { opacity: 0.08; }
+      50%       { opacity: 0.35; }
     }
 
     /* ── FILTER TABS ─────────────────────────────────────────── */
@@ -150,7 +191,7 @@
       cursor: pointer;
       background: #ccc;
     }
-    .card[data-cat="models"] { display: none; }
+    /* model card visibility handled entirely by JS via .hidden class */
 
     .card img {
       width: 100%;
@@ -172,22 +213,22 @@
     }
 
     .card-name {
-      font-family: var(--mono);
-      font-size: clamp(12px, 1.2vw, 16px);
-      font-weight: 300;
+      font-family: var(--sans);
+      font-size: clamp(15px, 1.4vw, 20px);
+      font-weight: 400;
       color: #f5f4f0;
-      letter-spacing: .08em;
+      letter-spacing: .02em;
       text-align: center;
       transition: opacity .25s ease, transform .25s ease;
       padding: 0 16px;
     }
     .card-cat {
-      font-family: var(--mono);
+      font-family: var(--sans);
       font-size: 10px;
       font-weight: 300;
-      letter-spacing: .14em;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      color: rgba(245,244,240,.55);
+      color: rgba(245,244,240,.50);
       transition: opacity .25s ease, transform .25s ease;
     }
     .card-arrow {
@@ -244,7 +285,8 @@
     }
 
     .resume-left h2 {
-      font-family: var(--serif);
+      font-family: var(--sans);
+  font-weight: 400;
       font-size: clamp(32px, 5vw, 56px);
       font-weight: 400;
       font-style: italic;
@@ -338,7 +380,8 @@
     }
 
     .contact-left h2 {
-      font-family: var(--serif);
+      font-family: var(--sans);
+  font-weight: 400;
       font-size: clamp(32px, 5vw, 56px);
       font-weight: 400;
       font-style: italic;
@@ -398,7 +441,8 @@
       border: none;
       border-bottom: 1px solid #ccc;
       padding: 8px 0 10px;
-      font-family: var(--serif);
+      font-family: var(--sans);
+  font-weight: 400;
       font-size: 16px;
       color: var(--ink);
       outline: none;
@@ -459,6 +503,32 @@
     @media (max-width: 480px) {
       .filter-btn { padding: 10px 14px 10px 0; font-size: 10px; }
     }
+
+    /* ── CUSTOM SCROLLBAR ───────────────────────────────────── */
+    html { scrollbar-width: none; }
+    ::-webkit-scrollbar { display: none; }
+
+    #scroll-track {
+      position: fixed;
+      right: 18px;
+      top: 14%;
+      height: 72%;
+      width: 1px;
+      background: rgba(154, 152, 144, 0.20);
+      z-index: 98;
+      pointer-events: none;
+    }
+    #scroll-thumb {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 32px;
+      border-radius: 2px;
+      background: rgba(154, 152, 144, 0.50);
+      top: 0;
+    }
+    @media (max-width: 768px) { #scroll-track { display: none; } }
 
     /* ── SCROLL TO TOP ───────────────────────────────────────── */
     #scroll-top {
@@ -563,6 +633,160 @@
       letter-spacing: .1em;
       color: rgba(245, 244, 240, .3);
     }
+
+    /* ── MODELS OVERLAY ─────────────────────────────────────── */
+    #models-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,20,18,0.96);
+      z-index: 200;
+    }
+    #models-overlay.open { display: block; }
+
+    #mo-close, #mv-close {
+      position: absolute;
+      top: 24px; right: 32px;
+      font-family: var(--mono);
+      font-size: 18px;
+      color: #f5f4f0;
+      background: none; border: none;
+      cursor: pointer;
+      opacity: .5;
+      transition: opacity .2s;
+      line-height: 1;
+      z-index: 1;
+    }
+    #mo-close:hover, #mv-close:hover { opacity: 1; }
+
+    /* group picker */
+    #models-groups {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px var(--gutter) 48px;
+    }
+    #groups-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(245,244,240,.35);
+      margin-bottom: 32px;
+    }
+    #groups-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-width: 860px;
+      width: 100%;
+    }
+    .group-card {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+    }
+    .group-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(.45);
+      transition: filter .3s;
+    }
+    .group-card:hover img { filter: brightness(.65); }
+    .group-info {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+    .group-name {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 400;
+      color: #f5f4f0;
+      letter-spacing: .02em;
+    }
+    .group-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(245,244,240,.45);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    /* image viewer */
+    #models-viewer {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #mv-back {
+      position: absolute;
+      top: 26px; left: 32px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(245,244,240,.45);
+      background: none; border: none;
+      cursor: pointer;
+      transition: color .2s;
+    }
+    #mv-back:hover { color: #f5f4f0; }
+    #mv-img {
+      max-width: 88vw;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+    }
+    #mv-prev, #mv-next {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: none; border: none;
+      color: #f5f4f0;
+      font-family: var(--mono);
+      font-size: 22px;
+      cursor: pointer;
+      opacity: .4;
+      transition: opacity .2s;
+      padding: 28px 20px;
+    }
+    #mv-prev:hover, #mv-next:hover { opacity: 1; }
+    #mv-prev { left: 12px; }
+    #mv-next { right: 12px; }
+    #mv-meta {
+      position: absolute;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+    }
+    #mv-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(245,244,240,.4);
+      white-space: nowrap;
+    }
+    #mv-counter {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(245,244,240,.25);
+    }
+    @media (max-width: 600px) {
+      #groups-grid { grid-template-columns: 1fr; max-width: 380px; }
+    }
   </style>
 </head>
 <body>
@@ -571,15 +795,26 @@
   <nav id="main-nav">
     <a href="#works" class="nav-logo">/\/ \/\/ /\</a>
     <ul class="nav-links">
-      <li><a href="#works" class="active" data-section="works">Works</a></li>
+      <li><a href="#works" class="active" data-section="works">Architecture</a></li>
       <li><a href="#resume" data-section="resume">Resume</a></li>
       <li><a href="#contact" data-section="contact">Contact</a></li>
     </ul>
   </nav>
 
+  <!-- BANNER -->
+  <div class="banner-wrap">
+    <picture>
+      <source media="(orientation: portrait) and (max-width: 767px)" srcset="images/banner-mobile.png">
+      <source media="(orientation: portrait)" srcset="images/banner-tablet.png">
+      <img src="images/banner.png" alt="Architecture">
+    </picture>
+    <button class="banner-arrow" aria-label="Scroll to works" onclick="document.getElementById('works').scrollIntoView({behavior:'smooth'})">
+      <svg viewBox="0 0 48 24" xmlns="http://www.w3.org/2000/svg"><polyline points="4 4 24 20 44 4"/></svg>
+    </button>
+  </div>
+
   <!-- WORKS -->
   <section id="works">
-    <span class="section-label">Selected Works</span>
 
     <div class="filter-row">
       <button class="filter-btn active" data-filter="all">All</button>
@@ -592,110 +827,77 @@
     <div class="grid" id="project-grid">
 
       <!-- Studio -->
-      <div class="card" data-cat="studio" data-order="1">
+      <a href="projects/wickercraft.html" class="card" data-cat="studio" data-order="1">
         <img src="images/wickercraft/hero.png" alt="Wickercraft Gallery" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">Wickercraft Gallery</span>
           <span class="card-cat">Studio · 2025</span>
           <span class="card-arrow">→</span>
         </div>
-      </div>
+      </a>
 
-      <div class="card" data-cat="studio" data-order="2">
+      <a href="projects/campus-life.html" class="card" data-cat="studio" data-order="2">
         <img src="images/campus-life/hero.png" alt="Campus Life ++" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">Campus Life ++</span>
           <span class="card-cat">Studio · 2024</span>
           <span class="card-arrow">→</span>
         </div>
-      </div>
+      </a>
 
-      <div class="card" data-cat="studio" data-order="3">
+      <a href="projects/cccac.html" class="card" data-cat="studio" data-order="3">
         <img src="images/cccac/hero.png" alt="CCCAC" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">CCCAC</span>
           <span class="card-cat">Studio · 2024</span>
           <span class="card-arrow">→</span>
         </div>
-      </div>
+      </a>
 
       <!-- Professional -->
-      <div class="card" data-cat="professional" data-order="4">
+      <a href="projects/cliff-house.html" class="card" data-cat="professional" data-order="4">
         <img src="images/cliff-house/hero.png" alt="Cliff House" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">Cliff House</span>
           <span class="card-cat">Professional · 2023</span>
           <span class="card-arrow">→</span>
         </div>
-      </div>
+      </a>
 
-      <div class="card" data-cat="professional" data-order="5">
+      <a href="projects/golden-valley.html" class="card" data-cat="professional" data-order="5">
         <img src="images/golden-valley/hero.png" alt="Golden Valley Residence" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">Golden Valley Residence</span>
           <span class="card-cat">Professional · 2023</span>
           <span class="card-arrow">→</span>
         </div>
-      </div>
+      </a>
 
       <!-- Competition -->
-      <div class="card" data-cat="competition" data-order="6">
+      <a href="projects/mental-healing.html" class="card" data-cat="competition" data-order="6">
         <img src="images/mental-healing/hero.png" alt="Mental Healing Hands" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">Mental Healing Hands</span>
           <span class="card-cat">Competition · 2023 · 3rd Place</span>
           <span class="card-arrow">→</span>
         </div>
-      </div>
+      </a>
 
-      <div class="card" data-cat="competition" data-order="7">
+      <a href="projects/drg-2026.html" class="card" data-cat="competition" data-order="7">
         <img src="images/drg-2026/hero.png" alt="DRG 2026" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">DRG 2026: Resilience Beyond Control</span>
           <span class="card-cat">Competition · 2026</span>
           <span class="card-arrow">→</span>
         </div>
-      </div>
+      </a>
 
-      <!-- Models divider (shown in All and Models filter) -->
-      <div class="models-divider" id="models-divider">
-        <span>Physical &amp; Experimental Models</span>
-      </div>
-
-      <!-- Models — click opens photo group lightbox.
-           Set data-photos to however many images are in that folder (01.png, 02.png …) -->
-      <div class="card" data-cat="models" data-order="8" data-group="campus-life" data-photos="3">
-        <img src="images/models/campus-life/01.png" alt="Campus Life Model" loading="lazy">
+      <!-- Single Models card — click opens 2-level overlay -->
+      <div class="card" id="models-card" data-cat="models" data-order="8" style="cursor:pointer;">
+        <img src="images/models/campus-life/01.png" alt="Models" loading="lazy">
         <div class="card-overlay">
-          <span class="card-name">Campus Life ++</span>
-          <span class="card-cat">Physical Model</span>
-          <span class="card-arrow">⊞</span>
-        </div>
-      </div>
-
-      <div class="card" data-cat="models" data-order="9" data-group="cccac" data-photos="2">
-        <img src="images/models/cccac/01.png" alt="CCCAC Model" loading="lazy">
-        <div class="card-overlay">
-          <span class="card-name">CCCAC</span>
-          <span class="card-cat">Physical Model</span>
-          <span class="card-arrow">⊞</span>
-        </div>
-      </div>
-
-      <div class="card" data-cat="models" data-order="10" data-group="wickercraft" data-photos="3">
-        <img src="images/models/wickercraft/01.png" alt="Wickercraft Model" loading="lazy">
-        <div class="card-overlay">
-          <span class="card-name">Wickercraft Gallery</span>
-          <span class="card-cat">3D Printed Model</span>
-          <span class="card-arrow">⊞</span>
-        </div>
-      </div>
-
-      <div class="card" data-cat="models" data-order="11" data-group="experimental" data-photos="2">
-        <img src="images/models/experimental/01.png" alt="Experimental Models" loading="lazy">
-        <div class="card-overlay">
-          <span class="card-name">Experimental</span>
-          <span class="card-cat">Process Models</span>
+          <span class="card-name">Models</span>
+          <span class="card-cat">Physical · 3D · Experimental</span>
           <span class="card-arrow">⊞</span>
         </div>
       </div>
@@ -708,7 +910,7 @@
     <div class="resume-layout">
       <div class="resume-left">
         <h2>Nay Win<br>Aung</h2>
-        <p>Architecture student at KMUTT, returning to school after three years in practice in Yangon. Available for internship June – July 2026.</p>
+        <p>Architecture student at King Mongkut's University of Technology Thonburi (KMUTT) with prior professional experience in residential and commercial projects across concept development, visualization, and technical production, coordinating with engineers. Interested in contemporary vernacular architecture, computational design, and regenerative design, with a focus on spatial atmosphere, material expression, and environmentally responsive architecture.</p>
         <a href="cv/CV_NayWinAung_2026.pdf" class="btn-download" download>Download CV</a>
       </div>
 
@@ -796,21 +998,63 @@
 
   <!-- FOOTER -->
   <footer>
-    <span>Nay Win Aung · Bangkok, Thailand</span>
-    <span>&copy; 2026 Nay Win Aung</span>
+    <span>&#8220;Ars longa, vita brevis.&#8221; — Hippocrates</span>
+    <span id="footer-year">&copy; 2026 Nay Win Aung all rights reserved</span>
   </footer>
 
-  <!-- LIGHTBOX -->
-  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Model photo viewer">
-    <button id="lightbox-close" aria-label="Close">✕</button>
-    <button id="lightbox-prev" aria-label="Previous">←</button>
-    <img id="lightbox-img" src="" alt="">
-    <button id="lightbox-next" aria-label="Next">→</button>
-    <div id="lightbox-meta">
-      <span id="lightbox-title"></span>
-      <span id="lightbox-counter"></span>
+  <!-- MODELS OVERLAY -->
+  <div id="models-overlay">
+    <!-- Level 1: group picker -->
+    <div id="models-groups">
+      <button id="mo-close" aria-label="Close">✕</button>
+      <span id="groups-label">Physical &amp; Experimental Models</span>
+      <div id="groups-grid">
+        <div class="group-card" data-group="campus-life" data-count="6">
+          <img src="images/models/campus-life/01.png" alt="">
+          <div class="group-info">
+            <span class="group-name">Campus Life ++</span>
+            <span class="group-sub">Physical Model · 6 photos</span>
+          </div>
+        </div>
+        <div class="group-card" data-group="cccac" data-count="5">
+          <img src="images/models/cccac/01.png" alt="">
+          <div class="group-info">
+            <span class="group-name">CCCAC</span>
+            <span class="group-sub">Physical Model · 5 photos</span>
+          </div>
+        </div>
+        <div class="group-card" data-group="wickercraft" data-count="1">
+          <img src="images/models/wickercraft/01.png" alt="">
+          <div class="group-info">
+            <span class="group-name">Wickercraft Gallery</span>
+            <span class="group-sub">3D Printed Model · 1 photo</span>
+          </div>
+        </div>
+        <div class="group-card" data-group="experimental" data-count="4">
+          <img src="images/models/experimental/01.png" alt="">
+          <div class="group-info">
+            <span class="group-name">Experimental</span>
+            <span class="group-sub">Process Models · 4 photos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Level 2: image viewer -->
+    <div id="models-viewer" style="display:none;">
+      <button id="mv-back" aria-label="Back">← Back</button>
+      <button id="mv-close" aria-label="Close">✕</button>
+      <button id="mv-prev" aria-label="Previous">←</button>
+      <img id="mv-img" src="" alt="">
+      <button id="mv-next" aria-label="Next">→</button>
+      <div id="mv-meta">
+        <span id="mv-title"></span>
+        <span id="mv-counter"></span>
+      </div>
     </div>
   </div>
+
+  <!-- CUSTOM SCROLL INDICATOR -->
+  <div id="scroll-track"><div id="scroll-thumb"></div></div>
 
   <!-- SCROLL TO TOP -->
   <button id="scroll-top" aria-label="Back to top">
@@ -818,134 +1062,122 @@
   </button>
 
   <script>
-    // ── NAV scroll border
+    /* ── FOOTER YEAR ── */
+    document.getElementById('footer-year').textContent =
+      '© ' + new Date().getFullYear() + ' Nay Win Aung all rights reserved';
+
+    /* ── NAV SCROLL BORDER ── */
     const nav = document.getElementById('main-nav');
     window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 20);
-    });
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
 
-    // ── Nav active link on scroll
+    /* ── ACTIVE NAV LINK ── */
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a[data-section]');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          navLinks.forEach(l => l.classList.remove('active'));
-          const active = document.querySelector(`.nav-links a[data-section="${e.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
+        if (e.isIntersecting)
+          navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === e.target.id));
       });
     }, { threshold: 0.35 });
     sections.forEach(s => observer.observe(s));
 
-    // ── Filter
+    /* ── FILTER TABS ── */
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.card');
-    const modelsDivider = document.getElementById('models-divider');
+    const cards      = document.querySelectorAll('.card');
 
+    function applyFilter(f) {
+      cards.forEach(card => {
+        const cat = card.dataset.cat;
+        if (f === 'all')          card.classList.remove('hidden');
+        else if (f === 'models')  card.classList.toggle('hidden', cat !== 'models');
+        else                      card.classList.toggle('hidden', cat === 'models' || cat !== f);
+      });
+    }
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const filter = btn.dataset.filter;
+        applyFilter(btn.dataset.filter);
+      });
+    });
+    applyFilter('all');
 
-        cards.forEach(card => {
-          const cat = card.dataset.cat;
-          if (filter === 'all') {
-            card.classList.remove('hidden');
-            card.style.display = '';
-          } else if (filter === cat) {
-            card.classList.remove('hidden');
-            card.style.display = '';
-          } else {
-            card.classList.add('hidden');
-            card.style.display = 'none';
-          }
-        });
+    /* ── MODELS OVERLAY ── */
+    const overlay      = document.getElementById('models-overlay');
+    const groupsEl     = document.getElementById('models-groups');
+    const viewerEl     = document.getElementById('models-viewer');
+    const mvImg        = document.getElementById('mv-img');
+    const mvTitle      = document.getElementById('mv-title');
+    const mvCounter    = document.getElementById('mv-counter');
+    let mvPhotos = [], mvIdx = 0;
 
-        // Show models divider only on All or Models filter
-        if (filter === 'all' || filter === 'models') {
-          modelsDivider.style.display = 'block';
-        } else {
-          modelsDivider.style.display = 'none';
-        }
+    function showMv() {
+      mvImg.src = mvPhotos[mvIdx];
+      mvCounter.textContent = (mvIdx + 1) + ' / ' + mvPhotos.length;
+    }
+
+    document.getElementById('models-card').addEventListener('click', () => {
+      groupsEl.style.display = 'flex';
+      viewerEl.style.display = 'none';
+      overlay.classList.add('open');
+    });
+
+    document.getElementById('mo-close').addEventListener('click', () => overlay.classList.remove('open'));
+    document.getElementById('mv-close').addEventListener('click', () => overlay.classList.remove('open'));
+    document.getElementById('mv-back').addEventListener('click', () => {
+      viewerEl.style.display = 'none';
+      groupsEl.style.display = 'flex';
+    });
+
+    document.querySelectorAll('.group-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const g = card.dataset.group;
+        const n = parseInt(card.dataset.count);
+        mvTitle.textContent = card.querySelector('.group-name').textContent;
+        mvPhotos = Array.from({length: n}, (_, i) =>
+          'images/models/' + g + '/' + String(i + 1).padStart(2, '0') + '.png');
+        mvIdx = 0;
+        showMv();
+        groupsEl.style.display = 'none';
+        viewerEl.style.display = 'flex';
       });
     });
 
-    // ── Contact form → mailto
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name    = document.getElementById('name').value.trim();
-      const email   = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-      const subject = encodeURIComponent('Enquiry');
-      const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-      window.location.href = `mailto:naywinag24@gmail.com?subject=${subject}&body=${body}`;
+    document.getElementById('mv-prev').addEventListener('click', () => {
+      mvIdx = (mvIdx - 1 + mvPhotos.length) % mvPhotos.length; showMv();
     });
-    // ── Scroll to top
+    document.getElementById('mv-next').addEventListener('click', () => {
+      mvIdx = (mvIdx + 1) % mvPhotos.length; showMv();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!overlay.classList.contains('open')) return;
+      if (e.key === 'Escape') overlay.classList.remove('open');
+      if (viewerEl.style.display !== 'none') {
+        if (e.key === 'ArrowLeft')  { mvIdx = (mvIdx - 1 + mvPhotos.length) % mvPhotos.length; showMv(); }
+        if (e.key === 'ArrowRight') { mvIdx = (mvIdx + 1) % mvPhotos.length; showMv(); }
+        if (e.key === 'Backspace')  { viewerEl.style.display = 'none'; groupsEl.style.display = 'flex'; }
+      }
+    });
+
+    /* ── SCROLL TO TOP ── */
     const scrollBtn = document.getElementById('scroll-top');
     window.addEventListener('scroll', () => {
       scrollBtn.classList.toggle('visible', window.scrollY > 400);
-    });
-    scrollBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    }, { passive: true });
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // ── Lightbox for model groups
-    const lightbox     = document.getElementById('lightbox');
-    const lbImg        = document.getElementById('lightbox-img');
-    const lbCounter    = document.getElementById('lightbox-counter');
-    const lbTitle      = document.getElementById('lightbox-title');
-    let lbImages = [], lbIndex = 0;
-
-    function showLbImage() {
-      lbImg.src = lbImages[lbIndex];
-      lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+    /* ── CUSTOM SCROLL INDICATOR ── */
+    const track = document.getElementById('scroll-track');
+    const thumb = document.getElementById('scroll-thumb');
+    function updateThumb() {
+      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+      thumb.style.top = (pct * (track.offsetHeight - thumb.offsetHeight)) + 'px';
     }
-    function openLightbox(images, title) {
-      lbImages = images;
-      lbIndex  = 0;
-      lbTitle.textContent = title;
-      showLbImage();
-      lightbox.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeLightbox() {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
-      lbImg.src = '';
-    }
-
-    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-    document.getElementById('lightbox-prev').addEventListener('click', () => {
-      lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length;
-      showLbImage();
-    });
-    document.getElementById('lightbox-next').addEventListener('click', () => {
-      lbIndex = (lbIndex + 1) % lbImages.length;
-      showLbImage();
-    });
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', e => {
-      if (!lightbox.classList.contains('open')) return;
-      if (e.key === 'Escape')     closeLightbox();
-      if (e.key === 'ArrowLeft')  { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; showLbImage(); }
-      if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbImages.length; showLbImage(); }
-    });
-
-    // Attach lightbox to model cards
-    document.querySelectorAll('.card[data-cat="models"]').forEach(card => {
-      card.addEventListener('click', () => {
-        const group  = card.dataset.group;
-        const count  = parseInt(card.dataset.photos, 10);
-        const name   = card.querySelector('.card-name').textContent;
-        const sub    = card.querySelector('.card-cat').textContent;
-        const images = Array.from({ length: count }, (_, i) =>
-          `images/models/${group}/${String(i + 1).padStart(2, '0')}.png`
-        );
-        openLightbox(images, `${name} — ${sub}`);
-      });
-    });
+    window.addEventListener('scroll', updateThumb, { passive: true });
+    updateThumb();
   </script>
 </body>
 </html>
