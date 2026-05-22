@@ -527,7 +527,9 @@
       border-radius: 2px;
       background: rgba(154, 152, 144, 0.50);
       top: 0;
+
     }
+    #scroll-thumb { transition: top .12s linear; }
     @media (max-width: 768px) { #scroll-track { display: none; } }
 
     /* ── SCROLL TO TOP ───────────────────────────────────────── */
@@ -1163,12 +1165,35 @@
       }
     });
 
+    /* ── CUSTOM SCROLL INDICATOR ── */
+    (function () {
+      const track = document.getElementById('scroll-track');
+      const thumb = document.getElementById('scroll-thumb');
+      if (!track || !thumb) return;
+
+      function updateThumb() {
+        const trackH  = track.offsetHeight;
+        const thumbH  = thumb.offsetHeight;
+        const maxTop  = trackH - thumbH;
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio  = scrollable > 0 ? window.scrollY / scrollable : 0;
+        thumb.style.top = (ratio * maxTop) + 'px';
+      }
+
+      window.addEventListener('scroll', updateThumb, { passive: true });
+      window.addEventListener('resize', updateThumb, { passive: true });
+      updateThumb();
+    })();
+
     /* ── SCROLL TO TOP ── */
     const scrollBtn = document.getElementById('scroll-top');
     window.addEventListener('scroll', () => {
       scrollBtn.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
     scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    /* ── DISABLE RIGHT-CLICK ── */
+    document.addEventListener('contextmenu', e => e.preventDefault());
   </script>
 </body>
 </html>

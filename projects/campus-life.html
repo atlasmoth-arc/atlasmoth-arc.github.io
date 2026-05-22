@@ -289,6 +289,9 @@
       img.parentNode.insertBefore(wrap, img);
       wrap.appendChild(img);
     });
+
+    /* ── DISABLE RIGHT-CLICK ── */
+    document.addEventListener('contextmenu', e => e.preventDefault());
   </script>
 </body>
 </html>
