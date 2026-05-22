@@ -1168,4 +1168,7 @@
     window.addEventListener('scroll', () => {
       scrollBtn.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
-    scrollBtn.addEventListener('click', () => wi
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+</body>
+</html>
