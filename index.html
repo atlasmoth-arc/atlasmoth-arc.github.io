@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nay Win Aung — Architecture</title>
+  <title>Nay Win Aung — Portfolio</title>
   <meta name="description" content="Architecture student at KMUTT Bangkok. Selected works in studio, competition, and professional practice.">
   <meta property="og:title" content="Nay Win Aung — Architecture">
   <meta property="og:description" content="Architecture student at KMUTT Bangkok. Selected works in studio, competition, and professional practice.">
@@ -796,6 +796,7 @@
     <a href="#works" class="nav-logo">/\/ \/\/ /\</a>
     <ul class="nav-links">
       <li><a href="#works" class="active" data-section="works">Architecture</a></li>
+      <li><a href="observations.html">Misc</a></li>
       <li><a href="#resume" data-section="resume">Resume</a></li>
       <li><a href="#contact" data-section="contact">Contact</a></li>
     </ul>
@@ -1167,17 +1168,4 @@
     window.addEventListener('scroll', () => {
       scrollBtn.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
-    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-    /* ── CUSTOM SCROLL INDICATOR ── */
-    const track = document.getElementById('scroll-track');
-    const thumb = document.getElementById('scroll-thumb');
-    function updateThumb() {
-      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-      thumb.style.top = (pct * (track.offsetHeight - thumb.offsetHeight)) + 'px';
-    }
-    window.addEventListener('scroll', updateThumb, { passive: true });
-    updateThumb();
-  </script>
-</body>
-</html>
+    scrollBtn.addEventListener('click', () => wi
