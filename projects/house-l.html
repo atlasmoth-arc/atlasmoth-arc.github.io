@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Life ++ — Nay Win Aung</title>
-  <meta name="description" content="An intensive rethinking of student life infrastructure on the KMUTT campus — pro">
+  <title>House-L — Nay Win Aung</title>
+  <meta name="description" content="Visualisation for an L-shaped concept residence, exploring massing, materiality, and spatial organisation.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
@@ -23,6 +23,9 @@
     }
 
     html { scroll-behavior: smooth; }
+
+    html { scrollbar-width: none; }
+    ::-webkit-scrollbar { display: none; }
 
     body {
       background: var(--bg);
@@ -72,6 +75,47 @@
     }
     .nav-links a:hover { color: var(--ink); }
 
+    /* ── HAMBURGER NAV (mobile) ───────────────────────────── */
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      margin-right: -4px;
+    }
+    .nav-hamburger svg {
+      display: block;
+      width: 20px; height: 14px;
+      stroke: var(--ink);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+    @media (max-width: 600px) {
+      .nav-hamburger { display: flex; align-items: center; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: var(--bg);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid #dddbd5;
+        padding: 8px 0;
+        z-index: 99;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block;
+        padding: 12px var(--gutter);
+        font-size: 12px;
+        letter-spacing: .1em;
+      }
+    }
+
     .project-header {
       margin-top: var(--nav-h);
       max-width: 1400px;
@@ -92,7 +136,6 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      object-position: top left;
       object-position: center;
     }
     .project-info { padding-top: 8px; }
@@ -159,7 +202,6 @@
       color: var(--ink-faint);
     }
 
-
     /* ── SCROLL TO TOP ─────────────────────────────────────── */
     #scroll-top {
       position: fixed;
@@ -191,6 +233,68 @@
     @media (max-width: 768px) {
       .project-header { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
     }
+
+    /* ── PAGE-NUMBER COVER + COPYRIGHT ─────────────────────── */
+    .img-wrap {
+      position: relative;
+      display: block;
+      margin-bottom: 16px;
+      line-height: 0;
+    }
+    .img-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-bottom: 0;
+    }
+    .img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 5%;
+      aspect-ratio: 2.2 / 1;
+      background: #fafafa;
+    }
+    .img-wrap::before {
+      content: '\00a9\a0 Design 2000 co. ltd';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      background: #fafafa;
+      padding: 5px 10px;
+      line-height: 1;
+    }
+
+    /* ── CUSTOM SCROLL INDICATOR ───────────────────────────── */
+    #scroll-track {
+      position: fixed;
+      right: 18px;
+      top: 14%;
+      height: 72%;
+      width: 1px;
+      background: rgba(154, 152, 144, 0.20);
+      z-index: 98;
+      pointer-events: none;
+    }
+    #scroll-thumb {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 32px;
+      border-radius: 2px;
+      background: rgba(154, 152, 144, 0.50);
+      top: 0;
+      transition: top .12s linear;
+    }
+    @media (max-width: 768px) { #scroll-track { display: none; } }
   </style>
 </head>
 <body>
@@ -199,53 +303,58 @@
     <a href="/#works" class="nav-logo">/\/ \/\/ /\</a>
     <ul class="nav-links">
       <li><a href="/#works">Architecture</a></li>
+      <li><a href="/captures.html">Captures</a></li>
       <li><a href="/#resume">Resume</a></li>
       <li><a href="/#contact">Contact</a></li>
     </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="1" x2="20" y2="1"/>
+        <line x1="0" y1="7" x2="20" y2="7"/>
+        <line x1="0" y1="13" x2="20" y2="13"/>
+      </svg>
+    </button>
   </nav>
 
   <div class="project-header">
     <div class="project-hero">
-      <img src="../images/campus-life/hero.png" alt="Campus Life ++">
+      <img src="../images/house-l/hero.png" alt="House-L">
     </div>
     <div class="project-info">
-      <h1 class="project-title">Campus Life <br>++</h1>
-      <!-- EDIT: replace with your actual description -->
+      <h1 class="project-title">House-L</h1>
       <p class="project-desc">
-        This project reimagines an underutilized campus building into an active student hub. The form was developed through a computational design process, using Grasshopper to carve voxels based on sightlines and site constraints. The resulting stepped structure features elevated platforms and transparent communal spaces, maximizing natural light, ventilation, and visual connections to the adjacent sports field.
+        Schematic floor plans for a compact 2 bedroom residence, 2D plan with rendered 3D plan for complementary visualisation.
       </p>
       <div class="project-meta">
         <div class="project-meta-row">
           <span class="project-meta-label">Year</span>
-          <span class="project-meta-value">2024</span>
+          <span class="project-meta-value">2022</span>
         </div>
         <div class="project-meta-row">
           <span class="project-meta-label">Type</span>
-          <span class="project-meta-value">Studio</span>
+          <span class="project-meta-value">Concept</span>
         </div>
         <div class="project-meta-row">
-          <span class="project-meta-label">Location</span>
-          <span class="project-meta-value">Bangkok, Thailand</span>
+          <span class="project-meta-label">Role</span>
+          <span class="project-meta-value">Modeling, Drafting, Visualisation</span>
         </div>
       </div>
     </div>
   </div>
 
   <div class="project-images">
-    <img src="../images/campus-life/01.png" alt="">
-    <img src="../images/campus-life/02.png" alt="">
-    <img src="../images/campus-life/03.png" alt="">
-    <img src="../images/campus-life/04.png" alt="">
-    <img src="../images/campus-life/05.png" alt="">
+    <div class="img-wrap"><img src="../images/house-l/01.png" alt=""></div>
   </div>
+
+  <div id="scroll-track"><div id="scroll-thumb"></div></div>
 
   <button id="scroll-top" aria-label="Back to top">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
   <footer>
-    <span>Nay Win Aung · Bangkok, Thailand</span>
-    <span>&copy; 2026 Nay Win Aung</span>
+    <span>&#8220;Ars longa, vita brevis.&#8221; — Hippocrates</span>
+    <span>&copy; 2026 Nay Win Aung, all rights reserved</span>
   </footer>
 
   <script>
@@ -257,5 +366,50 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   </script>
+
+  <script>
+    /* ── DISABLE RIGHT-CLICK ── */
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+  </script>
+
+  <script>
+    /* ── Hamburger nav ── */
+    (function(){
+      var btn = document.getElementById('nav-hamburger');
+      var links = document.querySelector('.nav-links');
+      if (!btn || !links) return;
+      btn.addEventListener('click', function(){
+        var open = links.classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(open));
+      });
+      links.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){
+          links.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── Custom scroll indicator JS ── */
+    (function () {
+      var track = document.getElementById('scroll-track');
+      var thumb = document.getElementById('scroll-thumb');
+      if (!track || !thumb) return;
+      function updateThumb() {
+        var trackH = track.offsetHeight;
+        var thumbH = thumb.offsetHeight;
+        var maxTop = trackH - thumbH;
+        var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        var ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
+        thumb.style.top = (ratio * maxTop) + 'px';
+      }
+      window.addEventListener('scroll', updateThumb, { passive: true });
+      window.addEventListener('resize', updateThumb, { passive: true });
+      updateThumb();
+    })();
+  </script>
+
 </body>
 </html>

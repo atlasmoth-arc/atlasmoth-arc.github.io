@@ -83,6 +83,48 @@
     .nav-links a:hover,
     .nav-links a.active { color: var(--ink); }
 
+    /* ── HAMBURGER NAV (mobile) ───────────────────────────── */
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      margin-right: -4px;
+    }
+    .nav-hamburger svg {
+      display: block;
+      width: 20px; height: 14px;
+      stroke: var(--ink);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+    @media (max-width: 600px) {
+      .nav-hamburger { display: flex; align-items: center; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: var(--bg);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid #dddbd5;
+        padding: 8px 0;
+        z-index: 99;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block;
+        padding: 12px var(--gutter);
+        font-size: 12px;
+        letter-spacing: .1em;
+      }
+    }
+
+
     /* ── SECTIONS ────────────────────────────────────────────── */
     section {
       padding-top: calc(var(--nav-h) + 64px);
@@ -802,6 +844,13 @@
       <li><a href="#resume" data-section="resume">Resume</a></li>
       <li><a href="#contact" data-section="contact">Contact</a></li>
     </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="1" x2="20" y2="1"/>
+        <line x1="0" y1="7" x2="20" y2="7"/>
+        <line x1="0" y1="13" x2="20" y2="13"/>
+      </svg>
+    </button>
   </nav>
 
   <!-- BANNER -->
@@ -857,6 +906,8 @@
         </div>
       </a>
 
+
+
       <!-- Professional -->
       <a href="projects/cliff-house.html" class="card" data-cat="professional" data-order="4">
         <img src="images/cliff-house/hero.png" alt="Cliff House" loading="lazy">
@@ -872,6 +923,24 @@
         <div class="card-overlay">
           <span class="card-name">Golden Valley Residence</span>
           <span class="card-cat">Professional · 2023</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="projects/sakawa-villa.html" class="card" data-cat="professional" data-order="6">
+        <img src="images/sakawa-villa/hero.png" alt="Sakawa Villa" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">Sakawa Villa</span>
+          <span class="card-cat">Professional · 2023</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="projects/house-l.html" class="card" data-cat="professional" data-order="7">
+        <img src="images/house-l/hero.png" alt="House-L" loading="lazy">
+        <div class="card-overlay">
+          <span class="card-name">House-L</span>
+          <span class="card-cat">Professional · 2022</span>
           <span class="card-arrow">→</span>
         </div>
       </a>
@@ -1000,9 +1069,9 @@
   </section>
 
   <!-- FOOTER -->
-  <footer>
+    <footer>
     <span>&#8220;Ars longa, vita brevis.&#8221; — Hippocrates</span>
-    <span id="footer-year">&copy; 2026 Nay Win Aung all rights reserved</span>
+    <span>&copy; 2026 Nay Win Aung, all rights reserved</span>
   </footer>
 
   <!-- MODELS OVERLAY -->
@@ -1066,8 +1135,8 @@
 
   <script>
     /* ── FOOTER YEAR ── */
-    document.getElementById('footer-year').textContent =
-      '© ' + new Date().getFullYear() + ' Nay Win Aung all rights reserved';
+    var fyEl = document.getElementById('footer-year');
+    if (fyEl) fyEl.textContent = '© ' + new Date().getFullYear() + ' Nay Win Aung';
 
     /* ── NAV SCROLL BORDER ── */
     const nav = document.getElementById('main-nav');
@@ -1186,14 +1255,58 @@
     })();
 
     /* ── SCROLL TO TOP ── */
-    const scrollBtn = document.getElementById('scroll-top');
-    window.addEventListener('scroll', () => {
-      scrollBtn.classList.toggle('visible', window.scrollY > 400);
-    }, { passive: true });
-    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    var scrollBtn = document.getElementById('scroll-top');
+    if (scrollBtn) {
+      window.addEventListener('scroll', function() {
+        scrollBtn.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      scrollBtn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
 
     /* ── DISABLE RIGHT-CLICK ── */
-    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
   </script>
+  <script>
+    /* ── Hamburger nav ── */
+    (function(){
+      var btn = document.getElementById('nav-hamburger');
+      var links = document.querySelector('.nav-links');
+      if (!btn || !links) return;
+      btn.addEventListener('click', function(){
+        var open = links.classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(open));
+      });
+      links.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){
+          links.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── CUSTOM SCROLL INDICATOR ── */
+    (function () {
+      var track = document.getElementById('scroll-track');
+      var thumb = document.getElementById('scroll-thumb');
+      if (!track || !thumb) return;
+      function updateThumb() {
+        var trackH = track.offsetHeight;
+        var thumbH = thumb.offsetHeight;
+        var maxTop = trackH - thumbH;
+        var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        var ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
+        thumb.style.top = (ratio * maxTop) + 'px';
+      }
+      window.addEventListener('scroll', updateThumb, { passive: true });
+      window.addEventListener('resize', updateThumb, { passive: true });
+      updateThumb();
+    })();
+  </script>
+
 </body>
 </html>
