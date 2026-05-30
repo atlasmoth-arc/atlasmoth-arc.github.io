@@ -27,7 +27,6 @@
     html { scrollbar-width: none; }
     ::-webkit-scrollbar { display: none; }
 
-
     body {
       background: var(--bg);
       color: var(--ink);
@@ -117,7 +116,6 @@
       }
     }
 
-
     .project-header {
       margin-top: var(--nav-h);
       max-width: 1400px;
@@ -204,7 +202,6 @@
       color: var(--ink-faint);
     }
 
-
     /* ── SCROLL TO TOP ─────────────────────────────────────── */
     #scroll-top {
       position: fixed;
@@ -285,23 +282,7 @@
   </style>
 </head>
 <body>
-
-  <nav id="main-nav">
-    <a href="/#works" class="nav-logo">/\/ \/\/ /\</a>
-    <ul class="nav-links">
-      <li><a href="/#works">Architecture</a></li>
-      <li><a href="/captures.html">Captures</a></li>
-      <li><a href="/#resume">Resume</a></li>
-      <li><a href="/#contact">Contact</a></li>
-    </ul>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
-      <svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="1" x2="20" y2="1"/>
-        <line x1="0" y1="7" x2="20" y2="7"/>
-        <line x1="0" y1="13" x2="20" y2="13"/>
-      </svg>
-    </button>
-  </nav>
+  <div id="nav-mount"></div>
 
   <div class="project-header">
     <div class="project-hero">
@@ -335,80 +316,14 @@
   </div>
 
   <div class="project-images">
-    <img src="../images/mental-healing/01.png" alt="">
-    <img src="../images/mental-healing/02.png" alt="">
-    <img src="../images/mental-healing/03.png" alt="">
+    <div class="img-wrap"><img src="../images/mental-healing/01.png" alt=""></div>
+    <div class="img-wrap"><img src="../images/mental-healing/02.png" alt=""></div>
+    <div class="img-wrap"><img src="../images/mental-healing/03.png" alt=""></div>
+  
   </div>
+  <div id="footer-mount"></div>
 
-  <div id="scroll-track"><div id="scroll-thumb"></div></div>
-
-  <button id="scroll-top" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="18 15 12 9 6 15"/></svg>
-  </button>
-
-    <footer>
-    <span>&#8220;Ars longa, vita brevis.&#8221; — Hippocrates</span>
-    <span>&copy; 2026 Nay Win Aung, all rights reserved</span>
-  </footer>
-
-  <script>
-    const scrollBtn = document.getElementById('scroll-top');
-    window.addEventListener('scroll', () => {
-      scrollBtn.classList.toggle('visible', window.scrollY > 400);
-    });
-    scrollBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  </script>
-
-  <script>
-    /* wrap project images so page-number cover ::after works */
-    document.querySelectorAll('.project-images img').forEach(img => {
-      const wrap = document.createElement('div');
-      wrap.className = 'img-wrap';
-      img.parentNode.insertBefore(wrap, img);
-      wrap.appendChild(img);
-    });
-
-    /* ── DISABLE RIGHT-CLICK ── */
-    document.addEventListener('contextmenu', e => e.preventDefault());
-  </script>
-  <script>
-    /* ── Hamburger nav ── */
-    (function(){
-      var btn = document.getElementById('nav-hamburger');
-      var links = document.querySelector('.nav-links');
-      if (!btn) return;
-      btn.addEventListener('click', function(){
-        var open = links.classList.toggle('open');
-        btn.setAttribute('aria-expanded', open);
-      });
-      links.querySelectorAll('a').forEach(function(a){
-        a.addEventListener('click', function(){
-          links.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-        });
-      });
-    })();
-  </script>
-  <script>
-    /* ── Custom scroll indicator JS ── */
-    (function () {
-      var track = document.getElementById('scroll-track');
-      var thumb = document.getElementById('scroll-thumb');
-      if (!track || !thumb) return;
-      function updateThumb() {
-        var trackH = track.offsetHeight;
-        var thumbH = thumb.offsetHeight;
-        var maxTop = trackH - thumbH;
-        var scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        var ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
-        thumb.style.top = (ratio * maxTop) + 'px';
-      }
-      window.addEventListener('scroll', updateThumb, { passive: true });
-      window.addEventListener('resize', updateThumb, { passive: true });
-      updateThumb();
-    })();
-  </script>
+  <script>window.SITE_CONFIG = { navBorderAlways: true };</script>
+  <script src="/components.js"></script>
 </body>
 </html>

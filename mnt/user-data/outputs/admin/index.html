@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Nay Win Aung</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:     #f5f4f0;
+      --ink:    #1a1a18;
+      --faint:  #9a9890;
+      --border: #dddbd5;
+      --red:    #c0392b;
+      --green:  #27ae60;
+      --sans:   'Quicksand', sans-serif;
+      --mono:   'DM Mono', monospace;
+    }
+    html { scrollbar-width: none; }
+    ::-webkit-scrollbar { display: none; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100dvh; }
+
+    /* ── LOCK SCREEN ── */
+    #lock-screen {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+      z-index: 999;
+    }
+    #lock-screen.hidden { display: none; }
+
+    .lock-box {
+      width: 100%; max-width: 360px;
+      padding: 0 24px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .lock-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .lock-box h1 {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+    #password-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0 12px;
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+      letter-spacing: .06em;
+    }
+    #password-input:focus { border-color: var(--ink); }
+    #lock-submit {
+      align-self: flex-start;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      border: none;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #lock-submit:hover { background: #444; }
+    #lock-error {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--red);
+      letter-spacing: .06em;
+      min-height: 18px;
+    }
+
+    /* ── ADMIN SHELL ── */
+    #admin-shell { display: none; }
+    #admin-shell.visible { display: block; }
+
+    .admin-nav {
+      position: sticky; top: 0;
+      height: 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(24px, 5vw, 64px);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+    }
+    .admin-nav-logo {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .admin-nav-logo span { color: var(--ink); }
+    #btn-logout {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color .2s;
+      padding: 4px 0;
+    }
+    #btn-logout:hover { color: var(--ink); }
+
+    .admin-body {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px clamp(24px, 5vw, 64px) 120px;
+    }
+
+    .admin-heading {
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .admin-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: var(--faint);
+      margin-bottom: 48px;
+    }
+
+    /* ── FORM ── */
+    .form-section {
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-section:last-of-type { border-bottom: none; }
+    .form-section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 24px;
+      display: block;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 40px;
+    }
+    .form-field {
+      margin-bottom: 28px;
+    }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 8px;
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0 10px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+    .form-field select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9890' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 4px center;
+      padding-right: 24px;
+    }
+    .form-field textarea { min-height: 100px; resize: vertical; }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus { border-color: var(--ink); }
+    .field-hint {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--faint);
+      margin-top: 6px;
+      letter-spacing: .04em;
+    }
+
+    /* ── SLUG PREVIEW ── */
+    #slug-preview {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--faint);
+      margin-top: 6px;
+      letter-spacing: .04em;
+    }
+    #slug-preview span { color: var(--ink); }
+
+    /* ── DESCRIPTIONS ── */
+    #desc-list { display: flex; flex-direction: column; gap: 12px; }
+    .desc-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .desc-row textarea {
+      flex: 1;
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0 10px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+      min-height: 70px;
+      transition: border-color .2s;
+    }
+    .desc-row textarea:focus { border-color: var(--ink); }
+    .desc-remove {
+      font-family: var(--mono);
+      font-size: 16px;
+      color: var(--faint);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 0;
+      line-height: 1;
+      transition: color .2s;
+      flex-shrink: 0;
+    }
+    .desc-remove:hover { color: var(--red); }
+    #btn-add-desc {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--faint);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 9px 16px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: color .2s, border-color .2s;
+    }
+    #btn-add-desc:hover { color: var(--ink); border-color: var(--ink); }
+
+    /* ── IMAGE UPLOAD ── */
+    .upload-zone {
+      border: 1px dashed var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--ink); }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+    .upload-zone-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      pointer-events: none;
+    }
+    .upload-zone-label span { color: var(--ink); }
+
+    /* ── IMAGE PREVIEW GRID ── */
+    #image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .preview-item {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      background: #e8e7e3;
+    }
+    .preview-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .preview-item .preview-badge {
+      position: absolute;
+      top: 4px; left: 4px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .06em;
+      background: rgba(20,20,18,.7);
+      color: #f5f4f0;
+      padding: 2px 6px;
+    }
+    .preview-item .preview-remove {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 20px; height: 20px;
+      background: rgba(20,20,18,.7);
+      border: none;
+      color: #f5f4f0;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .preview-item:hover .preview-remove { opacity: 1; }
+    .preview-item .preview-hero-toggle {
+      position: absolute;
+      bottom: 4px; left: 4px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .06em;
+      background: rgba(20,20,18,.55);
+      color: rgba(245,244,240,.7);
+      border: none;
+      padding: 2px 6px;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .preview-item.is-hero .preview-hero-toggle {
+      background: var(--ink);
+      color: #f5f4f0;
+    }
+
+    /* ── ORDER PICKER ── */
+    .order-wrap {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+    }
+    .order-wrap .form-field { flex: 1; margin-bottom: 0; }
+    #order-preview-list {
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--faint);
+      line-height: 2;
+      letter-spacing: .04em;
+    }
+    #order-preview-list .order-new {
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    /* ── COPYRIGHT TOGGLE ── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 4px;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 36px; height: 20px;
+      cursor: pointer;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0;
+      background: var(--border);
+      border-radius: 20px;
+      transition: background .2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      left: 3px; top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform .2s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--ink); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(16px); }
+    .toggle-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    /* ── SUBMIT ── */
+    .submit-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding-top: 16px;
+    }
+    #btn-publish {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      border: none;
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #btn-publish:hover:not(:disabled) { background: #444; }
+    #btn-publish:disabled { opacity: .4; cursor: not-allowed; }
+    #publish-status {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .06em;
+      min-height: 18px;
+    }
+    #publish-status.ok    { color: var(--green); }
+    #publish-status.error { color: var(--red); }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .order-wrap { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOCK SCREEN -->
+  <div id="lock-screen">
+    <div class="lock-box">
+      <span class="lock-label">Portfolio Admin</span>
+      <h1>Enter password<br>to continue.</h1>
+      <input type="password" id="password-input" placeholder="Password" autocomplete="current-password">
+      <div id="lock-error"></div>
+      <button id="lock-submit">Unlock</button>
+    </div>
+  </div>
+
+  <!-- ADMIN SHELL -->
+  <div id="admin-shell">
+    <div class="admin-nav">
+      <span class="admin-nav-logo">/\/ \/\/ /\ &nbsp; <span>Admin</span></span>
+      <button id="btn-logout">Log out</button>
+    </div>
+
+    <div class="admin-body">
+      <h1 class="admin-heading">New Project</h1>
+      <p class="admin-sub">Fill in the fields below and hit Publish. The project page and index card are created automatically.</p>
+
+      <!-- SECTION 1: Identity -->
+      <div class="form-section">
+        <span class="form-section-label">Identity</span>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-title">Title *</label>
+            <input type="text" id="f-title" placeholder="Project name">
+            <div id="slug-preview">URL: projects/<span id="slug-val">—</span>.html</div>
+          </div>
+          <div class="form-field">
+            <label for="f-slug">Slug *</label>
+            <input type="text" id="f-slug" placeholder="auto-generated">
+            <div class="field-hint">Lowercase, hyphens only. Used as filename.</div>
+          </div>
+          <div class="form-field">
+            <label for="f-year">Year *</label>
+            <input type="text" id="f-year" placeholder="2025">
+          </div>
+          <div class="form-field">
+            <label for="f-category">Category *</label>
+            <select id="f-category">
+              <option value="">Select…</option>
+              <option value="studio">Studio</option>
+              <option value="competition">Competition</option>
+              <option value="professional">Professional</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-type">Type</label>
+            <input type="text" id="f-type" placeholder="e.g. Mixed-use, Residential">
+          </div>
+          <div class="form-field">
+            <label for="f-location">Location <span style="font-weight:300;color:var(--faint)">(optional)</span></label>
+            <input type="text" id="f-location" placeholder="e.g. Bangkok, Thailand">
+          </div>
+          <div class="form-field full">
+            <label for="f-role">Role *</label>
+            <input type="text" id="f-role" placeholder="e.g. Design, Modeling, Drafting, Visualisation">
+          </div>
+          <div class="form-field full">
+            <label for="f-display-cat">Card label override <span style="font-weight:300;color:var(--faint)">(optional)</span></label>
+            <input type="text" id="f-display-cat" placeholder="e.g. Competition · 2025 · Honourable Mention">
+            <div class="field-hint">Shown on the index card. Defaults to "Category · Year".</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Description -->
+      <div class="form-section">
+        <span class="form-section-label">Description</span>
+        <div id="desc-list">
+          <div class="desc-row">
+            <textarea placeholder="First paragraph…"></textarea>
+            <button class="desc-remove" title="Remove paragraph">×</button>
+          </div>
+        </div>
+        <button id="btn-add-desc">+ Add paragraph</button>
+      </div>
+
+      <!-- SECTION 3: Images -->
+      <div class="form-section">
+        <span class="form-section-label">Images</span>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" multiple>
+          <span class="upload-zone-label">Drop images here or <span>click to browse</span><br>PNG / JPG / WEBP</span>
+        </div>
+        <div id="image-preview-grid"></div>
+        <p class="field-hint" style="margin-top:12px">Click <strong>Set as hero</strong> on the image you want as the cover. First image is hero by default. Images are uploaded to <code>images/[slug]/</code>.</p>
+      </div>
+
+      <!-- SECTION 4: Position in grid -->
+      <div class="form-section">
+        <span class="form-section-label">Grid position</span>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-order">Insert at position</label>
+            <input type="number" id="f-order" min="1" max="20" placeholder="e.g. 3">
+            <div class="field-hint">Existing cards at this position and after will shift down. Leave blank to append before Models.</div>
+          </div>
+        </div>
+        <div id="order-preview-list"></div>
+      </div>
+
+      <!-- SECTION 5: Options -->
+      <div class="form-section">
+        <span class="form-section-label">Options</span>
+        <div class="toggle-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="f-copyright">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Add copyright overlay on project images</span>
+        </div>
+        <div class="field-hint" style="margin-top:8px">Adds "© Design 2000 co. ltd" watermark. Use for professional work.</div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="submit-row">
+        <button id="btn-publish">Publish</button>
+        <span id="publish-status"></span>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* ── EXISTING CARDS (keep in sync manually if you add/remove) ── */
+    const EXISTING_CARDS = [
+      { order: 1, title: 'Wickercraft Gallery',          cat: 'studio' },
+      { order: 2, title: 'Campus Life ++',               cat: 'studio' },
+      { order: 3, title: 'CCCAC',                        cat: 'studio' },
+      { order: 4, title: 'Cliff House',                  cat: 'professional' },
+      { order: 5, title: 'Golden Valley Residence',      cat: 'professional' },
+      { order: 6, title: 'Sakawa Villa',                 cat: 'professional' },
+      { order: 7, title: 'House-L',                      cat: 'professional' },
+      { order: 8, title: 'Mental Healing Hands',         cat: 'competition' },
+      { order: 9, title: 'DRG 2026',                     cat: 'competition' },
+    ];
+
+    /* ── AUTH ── */
+    const lockScreen  = document.getElementById('lock-screen');
+    const adminShell  = document.getElementById('admin-shell');
+    const lockError   = document.getElementById('lock-error');
+    const pwInput     = document.getElementById('password-input');
+    const lockSubmit  = document.getElementById('lock-submit');
+    let authed = false;
+
+    async function tryLogin() {
+      lockError.textContent = '';
+      lockSubmit.disabled = true;
+      lockSubmit.textContent = '…';
+      try {
+        const r = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwInput.value }),
+        });
+        if (r.ok) {
+          authed = true;
+          lockScreen.classList.add('hidden');
+          adminShell.classList.add('visible');
+          renderOrderPreview();
+        } else {
+          lockError.textContent = 'Incorrect password.';
+          pwInput.focus();
+        }
+      } catch(e) {
+        lockError.textContent = 'Network error — is the API running?';
+      }
+      lockSubmit.disabled = false;
+      lockSubmit.textContent = 'Unlock';
+    }
+
+    lockSubmit.addEventListener('click', tryLogin);
+    pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      document.cookie = 'admin_session=; Max-Age=0; path=/';
+      location.reload();
+    });
+
+    /* ── SLUG AUTO-GENERATE ── */
+    const titleInput = document.getElementById('f-title');
+    const slugInput  = document.getElementById('f-slug');
+    const slugVal    = document.getElementById('slug-val');
+    let slugManual   = false;
+
+    function toSlug(s) {
+      return s.toLowerCase().trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    titleInput.addEventListener('input', () => {
+      if (!slugManual) {
+        slugInput.value = toSlug(titleInput.value);
+        slugVal.textContent = slugInput.value || '—';
+      }
+    });
+    slugInput.addEventListener('input', () => {
+      slugManual = !!slugInput.value;
+      slugVal.textContent = slugInput.value || '—';
+    });
+
+    /* ── DESCRIPTIONS ── */
+    const descList   = document.getElementById('desc-list');
+    const btnAddDesc = document.getElementById('btn-add-desc');
+
+    function addDescRow(value = '') {
+      const row = document.createElement('div');
+      row.className = 'desc-row';
+      row.innerHTML = `<textarea placeholder="Paragraph…">${value}</textarea><button class="desc-remove" title="Remove">×</button>`;
+      row.querySelector('.desc-remove').addEventListener('click', () => {
+        if (descList.children.length > 1) row.remove();
+      });
+      descList.appendChild(row);
+    }
+
+    // Init first row remove handler
+    descList.querySelector('.desc-remove').addEventListener('click', function () {
+      if (descList.children.length > 1) this.closest('.desc-row').remove();
+    });
+
+    btnAddDesc.addEventListener('click', () => addDescRow());
+
+    function getDescriptions() {
+      return [...descList.querySelectorAll('textarea')]
+        .map(t => t.value.trim()).filter(Boolean);
+    }
+
+    /* ── IMAGE UPLOAD ── */
+    const uploadZone    = document.getElementById('upload-zone');
+    const fileInput     = document.getElementById('file-input');
+    const previewGrid   = document.getElementById('image-preview-grid');
+    let imageFiles      = []; // { file, dataUrl, isHero }
+    let heroIndex       = 0;
+
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadZone.classList.remove('drag-over');
+      handleFiles([...e.dataTransfer.files]);
+    });
+    fileInput.addEventListener('change', () => {
+      handleFiles([...fileInput.files]);
+      fileInput.value = '';
+    });
+
+    function handleFiles(files) {
+      files.forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+          imageFiles.push({ file, dataUrl: e.target.result, name: file.name });
+          renderPreviewGrid();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderPreviewGrid() {
+      previewGrid.innerHTML = '';
+      imageFiles.forEach((img, i) => {
+        const item = document.createElement('div');
+        item.className = 'preview-item' + (i === heroIndex ? ' is-hero' : '');
+        item.innerHTML = `
+          <img src="${img.dataUrl}" alt="">
+          <span class="preview-badge">${String(i + 1).padStart(2, '0')}</span>
+          <button class="preview-remove" title="Remove">×</button>
+          <button class="preview-hero-toggle">${i === heroIndex ? '★ Hero' : 'Set as hero'}</button>
+        `;
+        item.querySelector('.preview-remove').addEventListener('click', () => {
+          imageFiles.splice(i, 1);
+          if (heroIndex >= imageFiles.length) heroIndex = Math.max(0, imageFiles.length - 1);
+          renderPreviewGrid();
+        });
+        item.querySelector('.preview-hero-toggle').addEventListener('click', () => {
+          heroIndex = i;
+          renderPreviewGrid();
+        });
+        previewGrid.appendChild(item);
+      });
+    }
+
+    /* ── ORDER PREVIEW ── */
+    const orderInput = document.getElementById('f-order');
+
+    function renderOrderPreview() {
+      const el  = document.getElementById('order-preview-list');
+      const pos = parseInt(orderInput.value) || null;
+      const title = titleInput.value.trim() || 'New Project';
+
+      let list = [...EXISTING_CARDS];
+      if (pos !== null) {
+        list.splice(pos - 1, 0, { order: pos, title, cat: 'new', _isNew: true });
+      } else {
+        list.push({ title, cat: 'new', _isNew: true });
+      }
+
+      el.innerHTML = list.map((c, i) =>
+        c._isNew
+          ? `<div class="order-new">${i + 1}. ${c.title} ← new</div>`
+          : `<div>${i + 1}. ${c.title}</div>`
+      ).join('');
+    }
+
+    orderInput.addEventListener('input', renderOrderPreview);
+    titleInput.addEventListener('input', renderOrderPreview);
+
+    /* ── PUBLISH ── */
+    const btnPublish     = document.getElementById('btn-publish');
+    const publishStatus  = document.getElementById('publish-status');
+
+    btnPublish.addEventListener('click', async () => {
+      publishStatus.className = '';
+      publishStatus.textContent = '';
+
+      const slug     = slugInput.value.trim();
+      const title    = titleInput.value.trim();
+      const year     = document.getElementById('f-year').value.trim();
+      const category = document.getElementById('f-category').value;
+      const type     = document.getElementById('f-type').value.trim();
+      const location = document.getElementById('f-location').value.trim();
+      const role     = document.getElementById('f-role').value.trim();
+      const displayCat = document.getElementById('f-display-cat').value.trim();
+      const order    = parseInt(orderInput.value) || null;
+      const hasCopyright = document.getElementById('f-copyright').checked;
+      const description  = getDescriptions();
+
+      if (!slug || !title || !year || !category) {
+        publishStatus.className = 'error';
+        publishStatus.textContent = 'Title, year, and category are required.';
+        return;
+      }
+      if (imageFiles.length === 0) {
+        publishStatus.className = 'error';
+        publishStatus.textContent = 'Upload at least one image.';
+        return;
+      }
+
+      btnPublish.disabled = true;
+      publishStatus.textContent = 'Uploading images…';
+
+      // Convert images to base64 for upload
+      const imagesPayload = imageFiles.map((img, i) => ({
+        name: i === heroIndex ? 'hero.png' : String(i).padStart(2, '0') + '.png',
+        data: img.dataUrl.split(',')[1],
+        type: img.file.type,
+        isHero: i === heroIndex,
+      }));
+
+      const heroImage = `images/${slug}/hero.png`;
+      const images    = imageFiles
+        .filter((_, i) => i !== heroIndex)
+        .map((_, i) => `images/${slug}/${String(i + 1).padStart(2, '0')}.png`);
+
+      publishStatus.textContent = 'Publishing…';
+
+      try {
+        const r = await fetch('/api/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            slug, title, year, type, location, role,
+            category, displayCat, description, order,
+            heroImage, images, imagesPayload,
+            hasCopyright,
+          }),
+        });
+        const data = await r.json();
+        if (r.ok) {
+          publishStatus.className = 'ok';
+          publishStatus.textContent = `✓ Published "${title}" — deploying now.`;
+        } else {
+          publishStatus.className = 'error';
+          publishStatus.textContent = `Error: ${data.error}`;
+        }
+      } catch(e) {
+        publishStatus.className = 'error';
+        publishStatus.textContent = 'Network error.';
+      }
+
+      btnPublish.disabled = false;
+    });
+  </script>
+</body>
+</html>

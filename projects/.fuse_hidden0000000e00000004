@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wickercraft Gallery — Nay Win Aung</title>
-  <meta name="description" content="Wickercraft Gallery — Studio project, 2025.">
+  <title>DRG 2026 — Nay Win Aung</title>
+  <meta name="description" content="An entry for the 2026 Disaster Resilience Global competition exploring spatial s">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
@@ -23,9 +23,6 @@
     }
 
     html { scroll-behavior: smooth; }
-
-    html { scrollbar-width: none; }
-    ::-webkit-scrollbar { display: none; }
 
     body {
       background: var(--bg);
@@ -75,47 +72,6 @@
     }
     .nav-links a:hover { color: var(--ink); }
 
-    /* ── HAMBURGER NAV (mobile) ───────────────────────────── */
-    .nav-hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      margin-right: -4px;
-    }
-    .nav-hamburger svg {
-      display: block;
-      width: 20px; height: 14px;
-      stroke: var(--ink);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-    }
-    @media (max-width: 600px) {
-      .nav-hamburger { display: flex; align-items: center; }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: var(--nav-h);
-        left: 0; right: 0;
-        background: var(--bg);
-        flex-direction: column;
-        gap: 0;
-        border-bottom: 1px solid #dddbd5;
-        padding: 8px 0;
-        z-index: 99;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links li { width: 100%; }
-      .nav-links a {
-        display: block;
-        padding: 12px var(--gutter);
-        font-size: 12px;
-        letter-spacing: .1em;
-      }
-    }
-
     .project-header {
       margin-top: var(--nav-h);
       max-width: 1400px;
@@ -136,6 +92,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      object-position: top left;
       object-position: center;
     }
     .project-info { padding-top: 8px; }
@@ -202,6 +159,7 @@
       color: var(--ink-faint);
     }
 
+
     /* ── SCROLL TO TOP ─────────────────────────────────────── */
     #scroll-top {
       position: fixed;
@@ -233,100 +191,67 @@
     @media (max-width: 768px) {
       .project-header { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
     }
-
-    /* ── PAGE-NUMBER COVER ──────────────────────────────────── */
-    .img-wrap {
-      position: relative;
-      display: block;
-      margin-bottom: 16px;
-      line-height: 0;
-    }
-    .img-wrap img {
-      display: block;
-      width: 100%;
-      height: auto;
-      margin-bottom: 0;
-    }
-    .img-wrap::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 5%;
-      aspect-ratio: 2.2 / 1;
-      background: #fafafa;
-    }
-    /* ── CUSTOM SCROLL INDICATOR ───────────────────────────── */
-    #scroll-track {
-      position: fixed;
-      right: 18px;
-      top: 14%;
-      height: 72%;
-      width: 1px;
-      background: rgba(154, 152, 144, 0.20);
-      z-index: 98;
-      pointer-events: none;
-    }
-    #scroll-thumb {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px;
-      height: 32px;
-      border-radius: 2px;
-      background: rgba(154, 152, 144, 0.50);
-      top: 0;
-      transition: top .12s linear;
-    }
-    @media (max-width: 768px) { #scroll-track { display: none; } }
   </style>
 </head>
 <body>
-  <div id="nav-mount"></div>
+
+  <nav id="main-nav">
+    <a href="/#works" class="nav-logo">/\/ \/\/ /\</a>
+    <ul class="nav-links">
+      <li><a href="/#works">Architecture</a></li>
+      <li><a href="/#resume">Resume</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+  </nav>
 
   <div class="project-header">
     <div class="project-hero">
-      <img src="../images/wickercraft/hero.png" alt="Wickercraft Gallery">
+      <img src="../images/drg-2026/hero.png" alt="DRG 2026">
     </div>
     <div class="project-info">
-      <h1 class="project-title">Wickercraft Gallery</h1>
+      <h1 class="project-title">DRG 2026:<br><em style='font-style:normal;font-size:0.7em'>Resilience Beyond Control</em></h1>
       <!-- EDIT: replace with your actual description -->
       <p class="project-desc">
-        Located in Chonburi, this gallery draws from local wickerwork traditions. The form is the result of an experimental design process which composes architectural language from basic geometry using fundamental architectural principles. Inside, the bamboo, palm, and rattan exhibition spaces physically interweave, encouraging a continuous, organic flow while framing expansive views of the Bang Phra reservoir.
+        This urban strategy addresses severe flood risks and informal riverbank settlements in Vadodara. The phased masterplan reclaims natural floodplains by introducing stepped esplanades, catchment ponds, and elevated walkways. Integrating resilient water-management infrastructure with public parks and elevating ground-floor housing, the design actively protects residents while improving their access to the river edge and connection to the nature.
       </p>
       <div class="project-meta">
         <div class="project-meta-row">
           <span class="project-meta-label">Year</span>
-          <span class="project-meta-value">2025</span>
+          <span class="project-meta-value">2026</span>
         </div>
         <div class="project-meta-row">
           <span class="project-meta-label">Type</span>
-          <span class="project-meta-value">Studio</span>
+          <span class="project-meta-value">Competition</span>
         </div>
         <div class="project-meta-row">
           <span class="project-meta-label">Location</span>
-          <span class="project-meta-value">Chonburi, Thailand</span>
-        </div>
-        <div class="project-meta-row">
-          <span class="project-meta-label">Role</span>
-          <span class="project-meta-value">Design, Modeling, Drafting, Visualisation</span>
+          <span class="project-meta-value">—</span>
         </div>
       </div>
     </div>
   </div>
 
   <div class="project-images">
-    <div class="img-wrap"><img src="../images/wickercraft/01.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/02.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/03.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/04.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/05.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/06.png" alt=""></div>
-  
+    <img src="../images/drg-2026/01.png" alt="">
   </div>
-  <div id="footer-mount"></div>
 
-  <script>window.SITE_CONFIG = { navBorderAlways: true };</script>
-  <script src="/components.js"></script>
+  <button id="scroll-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <footer>
+    <span>Nay Win Aung · Bangkok, Thailand</span>
+    <span>&copy; 2026 Nay Win Aung</span>
+  </footer>
+
+  <script>
+    const scrollBtn = document.getElementById('scroll-top');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('visible', window.scrollY > 400);
+    });
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
