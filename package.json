@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "cookie": "^0.6.0"
   }
 }
