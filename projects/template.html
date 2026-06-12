@@ -3,394 +3,139 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- EDIT: update title -->
+  <!-- EDIT: project title -->
   <title>Project Title — Nay Win Aung</title>
-  <meta name="description" content="Project description here.">
+  <meta name="description" content="Project Title — architecture project by Nay Win Aung.">
+  <meta property="og:title" content="Project Title — Nay Win Aung">
+  <meta property="og:description" content="Project Title — architecture project by Nay Win Aung.">
+  <meta property="og:type" content="article">
+  <!-- EDIT: replace PROJECT-FOLDER with the slug -->
+  <meta property="og:url" content="https://atlasmoth-arc.github.io/projects/PROJECT-FOLDER.html">
+  <meta property="og:image" content="https://atlasmoth-arc.github.io/images/PROJECT-FOLDER/hero.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5f4f0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --bg:        #f5f4f0;
       --ink:       #1a1a18;
       --ink-faint: #9a9890;
       --serif:     'EB Garamond', Georgia, serif;
+      --sans:      'Quicksand', sans-serif;
       --mono:      'DM Mono', monospace;
       --nav-h:     56px;
       --gutter:    clamp(24px, 5vw, 72px);
     }
-
-    html { scroll-behavior: smooth; }
-
-    html { scrollbar-width: none; }
+    html { scroll-behavior: smooth; scrollbar-width: none; }
     ::-webkit-scrollbar { display: none; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-weight: 400; font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--serif);
-      font-size: 17px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── NAV ───────────────────────────────────────────────── */
-    nav#main-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--gutter);
-      background: var(--bg);
-      z-index: 100;
-      border-bottom: 1px solid #dddbd5;
-    }
-    .nav-logo {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 300;
-      letter-spacing: .04em;
-      color: var(--ink);
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .nav-links {
-      display: flex;
-      gap: 36px;
-      list-style: none;
-    }
-    .nav-links a {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      text-decoration: none;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--ink); }
-
-    /* ── HAMBURGER NAV (mobile) ───────────────────────────── */
-    .nav-hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      margin-right: -4px;
-    }
-    .nav-hamburger svg {
-      display: block;
-      width: 20px; height: 14px;
-      stroke: var(--ink);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-    }
+    /* ── NAV (shared via components.js) ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--gutter); background: var(--bg); z-index: 100; border-bottom: 1px solid #dddbd5; transition: border-color .3s; }
+    .nav-logo { font-family: var(--mono); font-size: 13px; font-weight: 300; letter-spacing: .04em; color: var(--ink); text-decoration: none; white-space: nowrap; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { font-family: var(--mono); font-size: 11px; font-weight: 300; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; margin-right: -4px; }
+    .nav-hamburger svg { display: block; width: 20px; height: 14px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; }
     @media (max-width: 600px) {
       .nav-hamburger { display: flex; align-items: center; }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: var(--nav-h);
-        left: 0; right: 0;
-        background: var(--bg);
-        flex-direction: column;
-        gap: 0;
-        border-bottom: 1px solid #dddbd5;
-        padding: 8px 0;
-        z-index: 99;
-      }
+      .nav-links { display: none; position: absolute; top: var(--nav-h); left: 0; right: 0; background: var(--bg); flex-direction: column; gap: 0; border-bottom: 1px solid #dddbd5; padding: 8px 0; z-index: 99; }
       .nav-links.open { display: flex; }
       .nav-links li { width: 100%; }
-      .nav-links a {
-        display: block;
-        padding: 12px var(--gutter);
-        font-size: 12px;
-        letter-spacing: .1em;
-      }
+      .nav-links a { display: block; padding: 12px var(--gutter); font-size: 12px; letter-spacing: .1em; }
     }
 
+    /* ── PROJECT PAGE ── */
+    .project-wrap { padding-top: calc(var(--nav-h) + 56px); padding-bottom: 120px; padding-left: var(--gutter); padding-right: var(--gutter); max-width: 1400px; margin: 0 auto; }
+    .project-header { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: stretch; margin-bottom: 72px; }
+    .project-hero { overflow: hidden; }
+    .project-hero img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .project-info { display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 4px; }
+    .project-label { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 20px; }
+    .project-title { font-family: var(--sans); font-size: clamp(28px, 4vw, 48px); font-weight: 400; line-height: 1.15; margin-bottom: 32px; }
+    .meta-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+    .meta-row { display: flex; gap: 20px; align-items: baseline; }
+    .meta-label { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); min-width: 72px; }
+    .meta-value { font-size: 15px; color: var(--ink); }
+    .project-description { font-size: 16px; color: #444; line-height: 1.8; max-width: 540px; }
+    .project-description p + p { margin-top: 16px; }
+    .project-images { display: flex; flex-direction: column; gap: 2px; }
+    .img-wrap { overflow: hidden; width: 100%; }
+    .img-wrap img { width: 100%; height: auto; display: block; }
 
-    /* ── PROJECT HEADER — hero left, info right ────────────── */
-    .project-header {
-      margin-top: var(--nav-h);
-      max-width: 1400px;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 48px var(--gutter) 64px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: stretch;
-      border-bottom: 1px solid #dddbd5;
-    }
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid #dddbd5; padding: 28px var(--gutter); display: flex; justify-content: space-between; align-items: center; }
+    footer span { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: .1em; color: var(--ink-faint); }
 
-    .project-hero {
-      height: 100%;
-    }
-    .project-hero img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-
-    .project-info {
-      padding-top: 8px;
-    }
-
-    .project-title {
-      font-family: var(--serif);
-      font-size: clamp(28px, 3vw, 46px);
-      font-weight: 400;
-      font-style: italic;
-      line-height: 1.1;
-      margin-bottom: 28px;
-    }
-
-    .project-desc {
-      font-size: 16px;
-      color: #444;
-      line-height: 1.8;
-      margin-bottom: 36px;
-    }
-
-    .project-meta { display: flex; flex-direction: column; gap: 8px; }
-    .project-meta-row { display: flex; align-items: baseline; gap: 16px; }
-    .project-meta-label {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      min-width: 80px;
-    }
-    .project-meta-value {
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 300;
-      letter-spacing: .04em;
-      color: var(--ink);
-    }
-
-    /* ── IMAGES ────────────────────────────────────────────── */
-    .project-images {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 48px var(--gutter) 96px;
-    }
-    .project-images img {
-      display: block;
-      width: 100%;
-      height: auto;
-      margin-bottom: 16px;
-    }
-
-    /* ── FOOTER ────────────────────────────────────────────── */
-    footer {
-      border-top: 1px solid #dddbd5;
-      padding: 28px var(--gutter);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    footer span {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: .1em;
-      color: var(--ink-faint);
-    }
-
-    /* ── MOBILE ────────────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .project-header { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
-    }
-    /* ── CUSTOM SCROLL INDICATOR ───────────────────────────── */
-    #scroll-track {
-      position: fixed;
-      right: 18px;
-      top: 14%;
-      height: 72%;
-      width: 1px;
-      background: rgba(154, 152, 144, 0.20);
-      z-index: 98;
-      pointer-events: none;
-    }
-    #scroll-thumb {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px;
-      height: 32px;
-      border-radius: 2px;
-      background: rgba(154, 152, 144, 0.50);
-      top: 0;
-      transition: top .12s linear;
-    }
+    /* ── SCROLL INDICATOR ── */
+    #scroll-track { position: fixed; right: 18px; top: 14%; height: 72%; width: 1px; background: rgba(154,152,144,.20); z-index: 98; pointer-events: none; }
+    #scroll-thumb { position: absolute; left: 50%; transform: translateX(-50%); width: 3px; height: 32px; border-radius: 2px; background: rgba(154,152,144,.50); top: 0; transition: top .12s linear; }
     @media (max-width: 768px) { #scroll-track { display: none; } }
-    /* ── SCROLL TO TOP ─────────────────────────────────────── */
-    #scroll-top {
-      position: fixed;
-      bottom: 36px; right: 36px;
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      border: 1px solid #ccc;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .3s, border-color .2s, background .2s;
-      z-index: 99;
-    }
+
+    /* ── SCROLL TO TOP ── */
+    #scroll-top { position: fixed; bottom: 36px; right: 36px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #ccc; background: var(--bg); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .3s, border-color .2s, background .2s; z-index: 99; }
     #scroll-top.visible { opacity: 1; pointer-events: auto; }
     #scroll-top:hover { border-color: var(--ink); background: var(--ink); }
-    #scroll-top svg {
-      width: 14px; height: 14px;
-      stroke: var(--ink); fill: none;
-      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
-      transition: stroke .2s;
-    }
+    #scroll-top svg { width: 14px; height: 14px; stroke: var(--ink); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .2s; }
     #scroll-top:hover svg { stroke: var(--bg); }
     @media (max-width: 480px) { #scroll-top { bottom: 20px; right: 20px; } }
+
+    @media (max-width: 768px) {
+      .project-header { grid-template-columns: 1fr; }
+      .project-info { padding-bottom: 0; }
+    }
   </style>
+  <link rel="stylesheet" href="/site.css">
 </head>
 <body>
 
-  <nav id="main-nav">
-    <a href="/#works" class="nav-logo">/\/ \/\/ /\</a>
-    <ul class="nav-links">
-      <li><a href="/#works">Works</a></li>
-      <li><a href="/#resume">Resume</a></li>
-      <li><a href="/#contact">Contact</a></li>
-    </ul>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
-      <svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="1" x2="20" y2="1"/>
-        <line x1="0" y1="7" x2="20" y2="7"/>
-        <line x1="0" y1="13" x2="20" y2="13"/>
-      </svg>
-    </button>
-  </nav>
+  <div id="nav-mount"></div>
 
-  <!-- HEADER: hero left, info right -->
-  <div class="project-header">
-    <div class="project-hero">
-      <!-- EDIT: update image path -->
-      <img src="../images/PROJECT-FOLDER/hero.png" alt="Project Title">
-    </div>
-    <div class="project-info">
-      <!-- EDIT: project title -->
-      <h1 class="project-title">Project Title</h1>
-      <!-- EDIT: 2–4 sentence description -->
-      <p class="project-desc">
-        Short description of the project. What was the brief, what was the core idea, and what makes it interesting. Keep it to 2–4 sentences.
-      </p>
-      <div class="project-meta">
-        <!-- EDIT: fill in your values -->
-        <div class="project-meta-row">
-          <span class="project-meta-label">Year</span>
-          <span class="project-meta-value">2025</span>
+  <div class="project-wrap">
+    <div class="project-header">
+      <div class="project-hero">
+        <!-- EDIT: hero image -->
+        <img src="../images/PROJECT-FOLDER/hero.png" alt="Project Title" fetchpriority="high">
+      </div>
+      <div class="project-info">
+        <!-- EDIT: category label -->
+        <span class="project-label">Studio</span>
+        <h1 class="project-title">Project Title</h1>
+        <div class="meta-list">
+          <div class="meta-row"><span class="meta-label">Year</span><span class="meta-value">2025</span></div>
+          <!-- EDIT: keep the filter slug (studio / competition / professional) in sync with the category -->
+          <div class="meta-row"><span class="meta-label">Type</span><span class="meta-value"><a class="meta-link" href="/?filter=studio#works">Studio</a></span></div>
+          <div class="meta-row"><span class="meta-label">Location</span><span class="meta-value">Bangkok, Thailand</span></div>
+          <div class="meta-row"><span class="meta-label">Role</span><span class="meta-value">Design, Modeling, Drafting, Visualisation</span></div>
         </div>
-        <div class="project-meta-row">
-          <span class="project-meta-label">Type</span>
-          <span class="project-meta-value">Studio · 5th Year</span>
-        </div>
-        <div class="project-meta-row">
-          <span class="project-meta-label">Location</span>
-          <span class="project-meta-value">Bangkok, Thailand</span>
+        <div class="project-description">
+          <!-- EDIT: description paragraphs -->
+          <p>First paragraph of the project description.</p>
         </div>
       </div>
     </div>
+
+    <div class="project-images">
+      <!-- EDIT: project images, numbered 01.png, 02.png, … -->
+      <div class="img-wrap"><img src="../images/PROJECT-FOLDER/01.png" alt="Project Title — visual 1" loading="lazy" decoding="async"></div>
+      <div class="img-wrap"><img src="../images/PROJECT-FOLDER/02.png" alt="Project Title — visual 2" loading="lazy" decoding="async"></div>
+    </div>
   </div>
 
-  <!-- IMAGES — add or remove <img> lines as needed -->
-  <div class="project-images">
-    <img src="../images/PROJECT-FOLDER/01.png" alt="">
-    <img src="../images/PROJECT-FOLDER/02.png" alt="">
-    <img src="../images/PROJECT-FOLDER/03.png" alt="">
-    <!-- keep adding lines for more images -->
-  </div>
-
-    <div id="scroll-track"><div id="scroll-thumb"></div></div>
-
-  <button id="scroll-top" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="18 15 12 9 6 15"/></svg>
-  </button>
-
-  <footer>
-    <span>&#8220;Ars longa, vita brevis.&#8221; — Hippocrates</span>
-    <span>&copy; 2026 Nay Win Aung, all rights reserved</span>
-  </footer>
+  <div id="footer-mount"></div>
 
   <script>
-    /* ── Hamburger nav ── */
-    (function(){
-      var btn = document.getElementById('nav-hamburger');
-      var links = document.querySelector('.nav-links');
-      if (!btn) return;
-      btn.addEventListener('click', function(){
-        var open = links.classList.toggle('open');
-        btn.setAttribute('aria-expanded', open);
-      });
-      links.querySelectorAll('a').forEach(function(a){
-        a.addEventListener('click', function(){
-          links.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-        });
-      });
-    })();
+    window.SITE_CONFIG = { navBorderAlways: true };
   </script>
-  <script>
-    /* ── Custom scroll indicator JS ── */
-    (function () {
-      var track = document.getElementById('scroll-track');
-      var thumb = document.getElementById('scroll-thumb');
-      if (!track || !thumb) return;
-      function updateThumb() {
-        var trackH = track.offsetHeight;
-        var thumbH = thumb.offsetHeight;
-        var maxTop = trackH - thumbH;
-        var scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        var ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
-        thumb.style.top = (ratio * maxTop) + 'px';
-      }
-      window.addEventListener('scroll', updateThumb, { passive: true });
-      window.addEventListener('resize', updateThumb, { passive: true });
-      updateThumb();
-    })();
-  </script>
-  <script>
-    /* ── Scroll to top ── */
-    var scrollBtn = document.getElementById('scroll-top');
-    if (scrollBtn) {
-      window.addEventListener('scroll', function() {
-        scrollBtn.classList.toggle('visible', window.scrollY > 400);
-      }, { passive: true });
-      scrollBtn.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    }
-  </script>
-  <script>
-    /* ── Disable right-click ── */
-    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-  </script>
+  <script src="/components.js"></script>
+
 </body>
 </html>

@@ -59,12 +59,15 @@ function buildProjectPage(data) {
     description, images, heroImage, hasCopyright,
   } = data;
 
+  const pageURL = `https://atlasmoth-arc.github.io/projects/${slug}.html`;
+  const ogImage = `https://atlasmoth-arc.github.io/${(heroImage || '').replace(/^\//, '')}`;
+
   const locationRow = location
     ? `<div class="meta-row"><span class="meta-label">Location</span><span class="meta-value">${location}</span></div>`
     : '';
 
-  const imgWraps = images.map(src =>
-    `      <div class="img-wrap"><img src="${src}" alt="${title}" loading="lazy"></div>`
+  const imgWraps = images.map((src, i) =>
+    `      <div class="img-wrap"><img src="${src}" alt="${title} — visual ${i + 1}" loading="lazy" decoding="async"></div>`
   ).join('\n');
 
   const descParagraphs = (Array.isArray(description) ? description : [description])
@@ -94,6 +97,13 @@ function buildProjectPage(data) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title} — Nay Win Aung</title>
   <meta name="description" content="${title} — architecture project by Nay Win Aung.">
+  <meta property="og:title" content="${title} — Nay Win Aung">
+  <meta property="og:description" content="${title} — architecture project by Nay Win Aung.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="${pageURL}">
+  <meta property="og:image" content="${ogImage}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5f4f0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
@@ -169,6 +179,7 @@ function buildProjectPage(data) {
       .project-info { padding-bottom: 0; }
     }
   </style>
+  <link rel="stylesheet" href="/site.css">
 </head>
 <body>
 
@@ -177,14 +188,14 @@ function buildProjectPage(data) {
   <div class="project-wrap">
     <div class="project-header">
       <div class="project-hero">
-        <img src="${heroImage}" alt="${title}">
+        <img src="${heroImage}" alt="${title}" fetchpriority="high">
       </div>
       <div class="project-info">
         <span class="project-label">${category}</span>
         <h1 class="project-title">${title}</h1>
         <div class="meta-list">
           <div class="meta-row"><span class="meta-label">Year</span><span class="meta-value">${year}</span></div>
-          <div class="meta-row"><span class="meta-label">Type</span><span class="meta-value">${type}</span></div>
+          <div class="meta-row"><span class="meta-label">Type</span><span class="meta-value"><a class="meta-link" href="/?filter=${category}#works">${type}</a></span></div>
           ${locationRow}
           <div class="meta-row"><span class="meta-label">Role</span><span class="meta-value">${role}</span></div>
         </div>
@@ -211,10 +222,21 @@ ${imgWraps}
 }
 
 /* ── INDEX CARD INJECTION ── */
+function sanitizeTags(tags) {
+  // internal search keywords: lowercase words only, never displayed
+  return String(tags || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9,\s-]/g, '')
+    .replace(/[,\s]+/g, ' ')
+    .trim();
+}
+
 function buildCard(data) {
   const { slug, title, year, category, displayCat } = data;
   const catLabel = displayCat || (category.charAt(0).toUpperCase() + category.slice(1));
-  return `      <a href="projects/${slug}.html" class="card" data-cat="${category}" data-order="${data.order}">
+  const tags = sanitizeTags(data.tags);
+  const tagsAttr = tags ? ` data-tags="${tags}"` : '';
+  return `      <a href="projects/${slug}.html" class="card" data-cat="${category}" data-order="${data.order}"${tagsAttr}>
         <img src="images/${slug}/hero.png" alt="${title}" loading="lazy">
         <div class="card-overlay">
           <span class="card-name">${title}</span>
@@ -293,7 +315,7 @@ export default async function handler(req, res) {
   const {
     slug, title, year, type, location, role,
     category, displayCat, description, order,
-    heroImage, images, hasCopyright,
+    heroImage, images, hasCopyright, tags,
   } = req.body;
 
   if (!slug || !title || !year || !category) {
@@ -314,7 +336,7 @@ export default async function handler(req, res) {
     const currentIndex = Buffer.from(indexFile.content, 'base64').toString('utf8');
 
     // 3. Build new card HTML
-    const cardHTML = buildCard({ slug, title, year, category, displayCat, order: order || 99 });
+    const cardHTML = buildCard({ slug, title, year, category, displayCat, tags, order: order || 99 });
 
     // 4. Inject card into grid
     const updatedIndex = injectCard(currentIndex, cardHTML, order || 99);

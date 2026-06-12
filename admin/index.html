@@ -532,6 +532,11 @@
             <input type="text" id="f-display-cat" placeholder="e.g. Competition · 2025 · Honourable Mention">
             <div class="field-hint">Shown on the index card. Defaults to "Category · Year".</div>
           </div>
+          <div class="form-field full">
+            <label for="f-tags">Search tags <span style="font-weight:300;color:var(--faint)">(optional)</span></label>
+            <input type="text" id="f-tags" placeholder="e.g. residential, timber, bangkok, vernacular">
+            <div class="field-hint">Internal keywords for the site search — comma-separated, never shown to visitors. Materials, place, programme, techniques.</div>
+          </div>
         </div>
       </div>
 
@@ -795,6 +800,7 @@
       const location = document.getElementById('f-location').value.trim();
       const role     = document.getElementById('f-role').value.trim();
       const displayCat = document.getElementById('f-display-cat').value.trim();
+      const tags     = document.getElementById('f-tags').value.trim();
       const order    = parseInt(orderInput.value) || null;
       const hasCopyright = document.getElementById('f-copyright').checked;
       const description  = getDescriptions();
@@ -836,7 +842,7 @@
             slug, title, year, type, location, role,
             category, displayCat, description, order,
             heroImage, images, imagesPayload,
-            hasCopyright,
+            hasCopyright, tags,
           }),
         });
         const data = await r.json();
