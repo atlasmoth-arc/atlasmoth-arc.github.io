@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DRG 2026 — Nay Win Aung</title>
   <meta name="description" content="An entry for the 2026 Disaster Resilience Global competition exploring spatial s">
+  <meta property="og:title" content="DRG 2026 — Nay Win Aung">
+  <meta property="og:description" content="An entry for the 2026 Disaster Resilience Global competition exploring spatial s">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://atlasmoth-arc.github.io/projects/drg-2026.html">
+  <meta property="og:image" content="https://atlasmoth-arc.github.io/images/drg-2026/hero.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5f4f0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
@@ -35,7 +42,7 @@
       background: var(--bg);
       color: var(--ink);
       font-family: var(--sans);
-  font-weight: 400;
+      font-weight: 400;
       font-size: 17px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -145,7 +152,6 @@
     .project-info { padding-top: 8px; }
     .project-title {
       font-family: var(--sans);
-  font-weight: 400;
       font-size: clamp(28px, 3vw, 46px);
       font-weight: 400;
       font-style: italic;
@@ -284,13 +290,14 @@
     }
     @media (max-width: 768px) { #scroll-track { display: none; } }
   </style>
+  <link rel="stylesheet" href="/site.css">
 </head>
 <body>
   <div id="nav-mount"></div>
 
   <div class="project-header">
     <div class="project-hero">
-      <img src="../images/drg-2026/hero.png" alt="DRG 2026">
+      <img src="../images/drg-2026/hero.png" alt="DRG 2026" fetchpriority="high">
     </div>
     <div class="project-info">
       <h1 class="project-title">DRG 2026: Resilience Beyond Control</h1>
@@ -305,7 +312,7 @@
         </div>
         <div class="project-meta-row">
           <span class="project-meta-label">Type</span>
-          <span class="project-meta-value">Competition</span>
+          <span class="project-meta-value"><a class="meta-link" href="/?filter=competition#works">Competition</a></span>
         </div>
         <div class="project-meta-row">
           <span class="project-meta-label">Location</span>
@@ -320,7 +327,7 @@
   </div>
 
   <div class="project-images">
-    <div class="img-wrap"><img src="../images/drg-2026/01.png" alt=""></div>
+    <div class="img-wrap"><img src="../images/drg-2026/01.png" alt="DRG 2026 — visual 1" width="2000" height="1414" loading="lazy" decoding="async"></div>
   
   </div>
   <div id="footer-mount"></div>
