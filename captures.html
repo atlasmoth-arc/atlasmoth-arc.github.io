@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Captures — Nay Win Aung</title>
   <meta name="description" content="Sketches and photography by Nay Win Aung.">
+  <meta property="og:title" content="Captures — Nay Win Aung">
+  <meta property="og:description" content="Sketches and photography by Nay Win Aung.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://atlasmoth-arc.github.io/captures.html">
+  <meta property="og:image" content="https://atlasmoth-arc.github.io/images/captures/41.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5f4f0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
@@ -279,6 +286,7 @@
     #scroll-top:hover svg { stroke: var(--bg); }
     @media (max-width: 480px) { #scroll-top { bottom: 20px; right: 20px; } }
   </style>
+  <link rel="stylesheet" href="/site.css">
 </head>
 <body>
 
@@ -286,25 +294,24 @@
 
   <div class="page-wrap">
     <div class="masonry" id="masonry">
-      <div class="masonry-item" data-index="0"><img src="images/captures/41.png" alt=""></div>
-      <div class="masonry-item" data-index="1"><img src="images/captures/42.png" alt=""></div>
-      <div class="masonry-item" data-index="2"><img src="images/captures/43.png" alt=""></div>
-      <div class="masonry-item" data-index="3"><img src="images/captures/44.png" alt=""></div>
-      <div class="masonry-item" data-index="4"><img src="images/captures/45.png" alt=""></div>
-      <div class="masonry-item" data-index="5"><img src="images/captures/49707.jpg" alt=""></div>
-      <div class="masonry-item" data-index="6"><img src="images/captures/49709_0.jpg" alt=""></div>
-      <div class="masonry-item" data-index="7"><img src="images/captures/49710_0.jpg" alt=""></div>
-      <div class="masonry-item" data-index="8"><img src="images/captures/49712_0.jpg" alt=""></div>
-      <div class="masonry-item" data-index="9"><img src="images/captures/49713_0.jpg" alt=""></div>
-      <div class="masonry-item" data-index="10"><img src="images/captures/49715_0.jpg" alt=""></div>
-      <div class="masonry-item" data-index="11"><img src="images/captures/49716_0.jpg" alt=""></div>
+      <div class="masonry-item" data-index="0"><img src="images/captures/41.png" alt="Sketch 1" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="1"><img src="images/captures/42.png" alt="Sketch 2" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="2"><img src="images/captures/43.png" alt="Sketch 3" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="3"><img src="images/captures/44.png" alt="Sketch 4" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="4"><img src="images/captures/45.png" alt="Sketch 5" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="5"><img src="images/captures/49707.jpg" alt="Photograph 1" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="6"><img src="images/captures/49709_0.jpg" alt="Photograph 2" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="7"><img src="images/captures/49712_0.jpg" alt="Photograph 3" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="8"><img src="images/captures/49713_0.jpg" alt="Photograph 4" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="9"><img src="images/captures/49715_0.jpg" alt="Photograph 5" loading="lazy" decoding="async"></div>
+      <div class="masonry-item" data-index="10"><img src="images/captures/49716_0.jpg" alt="Photograph 6" loading="lazy" decoding="async"></div>
     </div>
   </div>
 
   <div id="footer-mount"></div>
 
   <!-- LIGHTBOX -->
-  <div id="lightbox">
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
     <button id="lb-close" aria-label="Close">✕</button>
     <button id="lb-prev" aria-label="Previous">←</button>
     <img id="lb-img" src="" alt="">
@@ -320,29 +327,45 @@
     const lbImg = document.getElementById('lb-img');
     const lbCtr = document.getElementById('lb-counter');
     let idx = 0;
+    let lbOpener = null;
 
+    function setImage() {
+      // fade between images; reveal once the new one has loaded
+      lbImg.style.opacity = '0';
+      const reveal = () => { lbImg.style.opacity = '1'; };
+      lbImg.addEventListener('load', reveal, { once: true });
+      lbImg.addEventListener('error', reveal, { once: true });
+      lbImg.src = srcs[idx];
+      if (lbImg.complete) reveal();
+      lbCtr.textContent = (idx + 1) + ' / ' + srcs.length;
+    }
     function openLb(i) {
       idx = i;
-      lbImg.src = srcs[idx];
-      lbCtr.textContent = (idx + 1) + ' / ' + srcs.length;
+      lbOpener = document.activeElement;
+      setImage();
       lb.classList.add('open');
+      document.getElementById('lb-close').focus();
+    }
+    function closeLb() {
+      lb.classList.remove('open');
+      if (lbOpener && lbOpener.focus) lbOpener.focus();
+      lbOpener = null;
     }
     function step(dir) {
       idx = (idx + dir + srcs.length) % srcs.length;
-      lbImg.src = srcs[idx];
-      lbCtr.textContent = (idx + 1) + ' / ' + srcs.length;
+      setImage();
     }
 
     items.forEach((el, i) => el.addEventListener('click', () => openLb(i)));
-    document.getElementById('lb-close').addEventListener('click', () => lb.classList.remove('open'));
+    document.getElementById('lb-close').addEventListener('click', closeLb);
     document.getElementById('lb-prev').addEventListener('click', () => step(-1));
     document.getElementById('lb-next').addEventListener('click', () => step(1));
-    lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
     document.addEventListener('keydown', e => {
       if (!lb.classList.contains('open')) return;
       if (e.key === 'ArrowLeft')  step(-1);
       if (e.key === 'ArrowRight') step(1);
-      if (e.key === 'Escape') lb.classList.remove('open');
+      if (e.key === 'Escape') closeLb();
     });
 
   </script>
