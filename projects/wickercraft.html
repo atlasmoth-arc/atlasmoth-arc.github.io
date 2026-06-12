@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wickercraft Gallery — Nay Win Aung</title>
   <meta name="description" content="Wickercraft Gallery — Studio project, 2025.">
+  <meta property="og:title" content="Wickercraft Gallery — Nay Win Aung">
+  <meta property="og:description" content="Wickercraft Gallery — Studio project, 2025.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://atlasmoth-arc.github.io/projects/wickercraft.html">
+  <meta property="og:image" content="https://atlasmoth-arc.github.io/images/wickercraft/hero.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5f4f0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⌂</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
@@ -35,7 +42,7 @@
       background: var(--bg);
       color: var(--ink);
       font-family: var(--sans);
-  font-weight: 400;
+      font-weight: 400;
       font-size: 17px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -145,7 +152,6 @@
     .project-info { padding-top: 8px; }
     .project-title {
       font-family: var(--sans);
-  font-weight: 400;
       font-size: clamp(28px, 3vw, 46px);
       font-weight: 400;
       font-style: italic;
@@ -284,13 +290,14 @@
     }
     @media (max-width: 768px) { #scroll-track { display: none; } }
   </style>
+  <link rel="stylesheet" href="/site.css">
 </head>
 <body>
   <div id="nav-mount"></div>
 
   <div class="project-header">
     <div class="project-hero">
-      <img src="../images/wickercraft/hero.png" alt="Wickercraft Gallery">
+      <img src="../images/wickercraft/hero.png" alt="Wickercraft Gallery" fetchpriority="high">
     </div>
     <div class="project-info">
       <h1 class="project-title">Wickercraft Gallery</h1>
@@ -305,7 +312,7 @@
         </div>
         <div class="project-meta-row">
           <span class="project-meta-label">Type</span>
-          <span class="project-meta-value">Studio</span>
+          <span class="project-meta-value"><a class="meta-link" href="/?filter=studio#works">Studio</a></span>
         </div>
         <div class="project-meta-row">
           <span class="project-meta-label">Location</span>
@@ -320,12 +327,12 @@
   </div>
 
   <div class="project-images">
-    <div class="img-wrap"><img src="../images/wickercraft/01.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/02.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/03.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/04.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/05.png" alt=""></div>
-    <div class="img-wrap"><img src="../images/wickercraft/06.png" alt=""></div>
+    <div class="img-wrap"><img src="../images/wickercraft/01.png" alt="Wickercraft Gallery — visual 1" width="2000" height="1414" loading="lazy" decoding="async"></div>
+    <div class="img-wrap"><img src="../images/wickercraft/02.png" alt="Wickercraft Gallery — visual 2" width="2000" height="1414" loading="lazy" decoding="async"></div>
+    <div class="img-wrap"><img src="../images/wickercraft/03.png" alt="Wickercraft Gallery — visual 3" width="2000" height="1414" loading="lazy" decoding="async"></div>
+    <div class="img-wrap"><img src="../images/wickercraft/04.png" alt="Wickercraft Gallery — visual 4" width="2000" height="1414" loading="lazy" decoding="async"></div>
+    <div class="img-wrap"><img src="../images/wickercraft/05.png" alt="Wickercraft Gallery — visual 5" width="2000" height="1414" loading="lazy" decoding="async"></div>
+    <div class="img-wrap"><img src="../images/wickercraft/06.png" alt="Wickercraft Gallery — visual 6" width="2000" height="1414" loading="lazy" decoding="async"></div>
   
   </div>
   <div id="footer-mount"></div>
