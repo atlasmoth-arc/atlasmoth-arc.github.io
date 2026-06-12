@@ -148,6 +148,8 @@ nav#main-nav {
 }
 .search-result:last-child { border-bottom: none; }
 .search-result .sr-title {
+  flex: 1;
+  min-width: 0;
   font-size: 11px;
   font-weight: 400;
   letter-spacing: .08em;
@@ -222,7 +224,15 @@ nav#main-nav {
     letter-spacing: .12em;
     font-size: 10px;
   }
-  #search-results-mobile .search-result { padding: 11px var(--gutter); }
+  /* inside .nav-links the generic `.nav-links a` rules win on
+     specificity — re-assert the row layout via the ID */
+  #search-results-mobile .search-result {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px var(--gutter);
+  }
 }
 
 /* ── PROJECT CARDS: slower, softer hover ─────────────────────── */
